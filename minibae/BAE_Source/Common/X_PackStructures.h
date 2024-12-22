@@ -90,7 +90,7 @@
         #if ((CPU_TYPE == k80X86) || (CPU_TYPE == kSPARC) || (CPU_TYPE == kARM))
             #pragma pack (1)
         #endif
-        #error unknown X_PLATFORM type
+        //#error unknown X_PLATFORM type
         
         // This define is used when declaring the structures. Some compilers, like GCC
         // need to use '__attribute__ ((packed))' at each structure to pack by a byte.

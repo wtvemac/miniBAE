@@ -99,9 +99,15 @@
             #define BAE_VERIFY(exp)     assert(exp)
         #endif
     #else
-        #include <assert.h>
-        #define BAE_ASSERT(exp)     assert(exp)
-        #define BAE_VERIFY(exp)     assert(exp)
+        #if (X_PLATFORM == X_WEBTV)
+            #define BAE_PRINTF(...)
+            #define BAE_ASSERT(exp)         ((void)0)
+            #define BAE_VERIFY(exp)         (exp)
+        #else
+            #include <assert.h>
+            #define BAE_ASSERT(exp)     assert(exp)
+            #define BAE_VERIFY(exp)     assert(exp)
+        #endif
     #endif
 
 #endif

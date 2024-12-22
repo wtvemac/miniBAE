@@ -1735,6 +1735,7 @@ SongResource_Info * XGetSongResourceInfo(SongResource *pSong, long songSize)
 
 // This will create a new song resource from the more accessable SongResource_Info
 #if USE_CREATION_API == TRUE
+#if X_PLATFORM != X_WEBTV
 SongResource * XNewSongFromSongResourceInfo(SongResource_Info *pSongInfo)
 {
     SongResource                    *newSong, *otherNew;
@@ -1802,6 +1803,7 @@ SongResource * XNewSongFromSongResourceInfo(SongResource_Info *pSongInfo)
     }
     return newSong;
 }
+#endif  // X_PLATFORM != X_WEBTV
 
 // return a new blank SongResource_Info structure
 SongResource_Info * XNewSongResourceInfo(void)

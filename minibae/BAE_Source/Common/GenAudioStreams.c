@@ -34,7 +34,7 @@
 **
 **  This implements multi source audio streaming code.
 **
-**  � Copyright 1993-2001 Beatnik, Inc, All Rights Reserved.
+**  짤 Copyright 1993-2001 Beatnik, Inc, All Rights Reserved.
 **  Written by Steve Hales
 **
 **  Beatnik products contain certain trade secrets and confidential and
@@ -230,7 +230,7 @@
 #include "BAE_API.h"
 #include "X_Assert.h"
 
-/* THINGS TO DO ⅴⅴⅴⅴⅴⅴⅴⅴⅴⅴⅴⅴⅴⅴⅴⅴⅴⅴⅴⅴⅴ
+/* THINGS TO DO 짜짜짜짜짜짜짜짜짜짜짜짜짜짜짜짜짜짜짜짜짜짜짜짜짜짜짜짜짜짜짜짜짜짜짜짜짜짜짜짜짜짜
 
 */
 
@@ -430,7 +430,7 @@ typedef struct GM_AudioStream GM_AudioStream;
 
 // linked list of all active streams. Required for servicing. Call GM_AudioStreamService() to process
 // all the streams, for fades, callbacks, reads, etc
-static GM_AudioStream   *theStreams = NULL;
+static GM_AudioStream   *theStreams;
 
 // verify reference is a valid audio stream structure
 static GM_AudioStream * PV_AudioStreamGetFromReference(STREAM_REFERENCE reference)
@@ -1297,7 +1297,6 @@ void * GM_AudioStreamGetDoneCallback(STREAM_REFERENCE reference, GM_SoundDoneCal
     void                    *doneCallbackReference;
 
     doneCallback = NULL;
-    reference = NULL;
     pStream = PV_AudioStreamGetFromReference(reference);
     if (pStream)
     {

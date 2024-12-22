@@ -338,7 +338,9 @@ static void PV_ServeEffectCallbacks(void *threadContext)
 // process all sample events. Fades, callbacks, etc
 void PV_ProcessSampleEvents(void *threadContext)
 {
-    PV_ServeEffectsFades();
+    #if X_PLATFORM != X_WEBTV
+        PV_ServeEffectsFades();
+    #endif
     #if USE_CALLBACKS
         PV_ServeEffectCallbacks(threadContext);
     #endif

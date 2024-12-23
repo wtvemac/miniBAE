@@ -9,7 +9,7 @@ INC_PATH	+= -IBAE_Source/Platform
 INC_PATH	+= -IBAE_MPEG_Source_II
 INC_PATH	+= -Ibanks/patches
 
-SRC		:=	BAE_API_WebTV.c
+SRC		:=	BAE_API_MacOSX.c
 
 SRC		+= \
 			DriverTools.c \
@@ -69,14 +69,14 @@ OBJ_DIR := obj/
 OBJ := $(addprefix $(OBJ_DIR),$(addsuffix .o,$(basename ${SRC})))
 
 #ARCH	:= -arch x86_64
-#ARCH	:= -arch i386
+ARCH	:= -arch i386
 CC		:= gcc
 CXX		:= g++
 LD		:= g++
 AR      := ar
 
 CFLAGS  	:= $(ARCH) -g -O0 $(INC_PATH) -D_THREAD_SAFE
-CFLAGS		+= -DX_PLATFORM=X_WEBTV
+CFLAGS		+= -DX_PLATFORM=X_MACINTOSH
 CFLAGS		+= -D_DEBUG=1
 #CFLAGS		+= -DREVERB_USED=REVERB_DISABLED
 CXXFLAGS 	:= $(CFLAGS)
@@ -84,7 +84,10 @@ LDFLAGS		:= $(ARCH) -all_load -static-libgcc -prebind
 
 
 LIBS	= 	-L/opt/local/lib \
-			-lpthread
+			-lpthread \
+			-Wl,-framework,CoreFoundation \
+			-Wl,-framework,CoreAudio \
+			-Wl,-framework,AudioToolbox
 
 all: $(TARGET)
 
@@ -107,5 +110,4 @@ clean:
 	@rm -rdf $(OBJ_DIR)
 	@rm -rdf build
 	@echo Cleaned!
-
 

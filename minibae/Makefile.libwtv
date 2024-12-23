@@ -4,10 +4,10 @@ vpath %.c $(CURDIR)/external/heyigor/miniBAE/minibae/BAE_Source/Common $(CURDIR)
 vpath %.c $(CURDIR)/external/heyigor/miniBAE/minibae/banks/patches
 vpath %.c $(CURDIR)/external/heyigor/miniBAE/minibae/BAE_MPEG_Source_II
 
-INC_PATH := -I$(CURDIR)/external/heyigor/miniBAE/minibae/BAE_Source/Common
-INC_PATH += -I$(CURDIR)/external/heyigor/miniBAE/minibae/BAE_Source/Platform
-INC_PATH += -I$(CURDIR)/external/heyigor/miniBAE/minibae/BAE_MPEG_Source_II
-INC_PATH += -I$(CURDIR)/external/heyigor/miniBAE/minibae/banks/patches
+MINIBAE_INC := -I$(CURDIR)/external/heyigor/miniBAE/minibae/BAE_Source/Common
+MINIBAE_INC += -I$(CURDIR)/external/heyigor/miniBAE/minibae/BAE_Source/Platform
+MINIBAE_INC += -I$(CURDIR)/external/heyigor/miniBAE/minibae/BAE_MPEG_Source_II
+MINIBAE_INC += -I$(CURDIR)/external/heyigor/miniBAE/minibae/banks/patches
 
 SRC := BAE_API_WebTV.c
 
@@ -49,24 +49,22 @@ SRC += \
 OBJ_DIR := $(CURDIR)/external/heyigor/miniBAE/minibae/obj/
 OBJ := $(addprefix $(OBJ_DIR),$(addsuffix .o,$(basename ${SRC})))
 
-MBAE_CFLAGS   := -g -O0 $(INC_PATH)
-MBAE_CFLAGS   += -D_THREAD_SAFE -DX_PLATFORM=X_WEBTV
-MBAE_CFLAGS   += -D_DEBUG=1
-MBAE_CXXFLAGS := $(MBAE_CFLAGS)
+MINIBAE_CFLAGS   := $(WTV_CFLAGS) $(MINIBAE_INC)
+MINIBAE_CXXFLAGS := $(WTV_CXXFLAGS) $(MINIBAE_INC)
 
 $(TARGET): $(OBJ)
 	$(AR) rcs $(TARGET) $(OBJ)
 
 # Rules for compiling source files to object files
 $(OBJ_DIR)%.o : %.cpp
-	@echo @compile $<
+	@echo "    [CC BAE-$(WTVLIB_FILE_SUFFIX)] $<"
 	@mkdir -p $(OBJ_DIR)
-	@${CXX} -c ${MBAE_CXXFLAGS} $< -o $@
+	@${CXX} -c ${MINIBAE_CXXFLAGS} $< -o $@
 
 $(OBJ_DIR)%.o : %.c
-	@echo @compile $<
+	@echo "    [CXX BAE-$(WTVLIB_FILE_SUFFIX)] $<"
 	@mkdir -p $(OBJ_DIR)
-	@${CC} -c ${MBAE_CFLAGS} $< -o $@
+	@${CC} -c ${MINIBAE_CFLAGS} $< -o $@
 
 install-minibae:
 	mkdir -p $(INSTALL_DIR)/lib

@@ -71,7 +71,7 @@
 // ----------------------------------------------
 #define COMPILER_TYPE                                           GCC_COMPILER
 
-#define CPU_TYPE                                                kRISC
+#define CPU_TYPE                                                kMIPS
 
 #define X_WORD_ORDER                                            TRUE
 #define USE_FLOAT                                               FALSE

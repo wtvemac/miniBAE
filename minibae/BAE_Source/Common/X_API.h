@@ -321,6 +321,7 @@
 #define kSPARC              3
 #define kARM                4
 #define kC54x               5       // Texas Instruments C54x family
+#define kMIPS               6
 
 // types for COMPILER_TYPE
 #define DEFAULT_COMPILER    0

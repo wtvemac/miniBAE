@@ -1,4 +1,4 @@
-TARGET = libMiniBAE.a
+TARGET = libminibae-$(WTVLIB_FILE_SUFFIX).a
 
 vpath	%.c $(CURDIR)/external/heyigor/miniBAE/minibae/BAE_Source/Common $(CURDIR)/external/heyigor/miniBAE/minibae/BAE_Source/Platform 
 vpath	%.c $(CURDIR)/external/heyigor/miniBAE/minibae/banks/patches

@@ -493,7 +493,7 @@ enum
     REVERB_TYPE_10,         // Banquet hall (variable verb)
     REVERB_TYPE_11          // Catacombs (variable verb)
 };
-typedef char ReverbMode;
+typedef unsigned char ReverbMode;
 #define MAX_REVERB_TYPES    12
 
 typedef void (*GM_ReverbProc)(ReverbMode which);

@@ -608,6 +608,7 @@ BAEMixer BAEMixer_New(void)
             mixer->mTaskReference = NULL;
             mixer->mFadeRate = FLOAT_TO_FIXED(2.2);
             mixer->mMutedVolumeLevel = BAE_GetHardwareVolume();
+            mixer->numPatchFiles = 0;
             
             BAE_ReleaseMutex(mixer->mLock);
         }

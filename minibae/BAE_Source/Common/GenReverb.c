@@ -117,7 +117,7 @@ static void PV_RunMonoFixedReverb(ReverbMode which)
     register INT32      b, c, bz, cz;
     register INT32      *sourceLR, *sourceReverb;
     register INT32      *reverbBuf;
-    register LOOPCOUNT  a;
+    register LOOPCOUNT  a = 0;
     register long       reverbPtr1, reverbPtr2, reverbPtr3, reverbPtr4;
 
     reverbBuf = &MusicGlobals->reverbBuffer[0];
@@ -407,7 +407,7 @@ static void PV_RunStereoFixedReverb(ReverbMode which)
     register INT32      b, c, bz, cz;
     register INT32      *sourceLR;
     register INT32      *reverbBuf;
-    register LOOPCOUNT  a;
+    register LOOPCOUNT  a = 0;
     register long       reverbPtr1, reverbPtr2, reverbPtr3, reverbPtr4;
 
     reverbBuf = &MusicGlobals->reverbBuffer[0];

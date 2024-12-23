@@ -1476,7 +1476,7 @@ char                        *pLeft, *pRight;
 #if USE_CREATION_API == TRUE
 // Given a sample ID, this will search through sample types and return a 'C' string
 // of the resource name of the currently open resource files
-XBOOL XGetSampleNameFromID(XLongResourceID sampleSoundID, char cName[256])
+XBOOL XGetSampleNameFromID(XLongResourceID sampleSoundID, char *cName)
 {
     static XResourceType    sampleType[] = {ID_CSND, ID_ESND, ID_SND};
     short int               count;
@@ -1576,10 +1576,6 @@ XSoundFormat1*      header;
     BAE_ASSERT(srcWave);
     BAE_ASSERT(srcWave->theWaveform);
     BAE_ASSERT(srcWave->waveSize > 0);
-#if USE_MPEG_ENCODER == 0
-    proc;           // suppress unreferenced parameter warning
-    procData;       // suppress unreferenced parameter warning
-#endif
 
     *dst = NULL;
 

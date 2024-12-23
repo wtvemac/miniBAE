@@ -1773,7 +1773,7 @@ OPErr GM_AudioStreamStart(STREAM_REFERENCE reference)
 long GM_AudioStreamGetReference(STREAM_REFERENCE reference)
 {
     GM_AudioStream      *pStream;
-    long                userReference = NULL;
+    long                userReference = 0;
 
     pStream = PV_AudioStreamGetFromReference(reference);
     if (pStream)
@@ -1883,7 +1883,6 @@ OPErr GM_AudioStreamStop(void *threadContext, STREAM_REFERENCE reference)
 
     GM_AudioStream      *pStream;
 
-    threadContext;
     pStream = PV_AudioStreamGetFromReference(reference);
 
     if (pStream)

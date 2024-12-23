@@ -1039,7 +1039,7 @@ void XPutLong(void *pData, unsigned long data)
 
 unsigned long XSwapLong(unsigned long value)
 {
-    unsigned long   newValue;
+    unsigned long   newValue = 0;
     unsigned char   *pOld;
     unsigned char   *pNew;
     unsigned char   temp;
@@ -1061,7 +1061,7 @@ unsigned long XSwapLong(unsigned long value)
 
 unsigned short XSwapShort(unsigned short value)
 {
-    unsigned short  newValue;
+    unsigned short  newValue = 0;
     unsigned char   *pOld;
     unsigned char   *pNew;
     unsigned char   temp;
@@ -1080,7 +1080,7 @@ unsigned short XSwapShort(unsigned short value)
 
 unsigned long XSwapShortInLong(unsigned long value)
 {
-    unsigned long   newValue;
+    unsigned long   newValue = 0;
     unsigned short  *pOld;
     unsigned short  *pNew;
     unsigned short  temp;
@@ -1347,7 +1347,6 @@ XFILE XFileOpenResourceFromMemory(XPTR pResource, unsigned long resourceLength, 
     XFILERESOURCEMAP    map;
     short int           err;
 
-    allowCopy;
     err = 0;
     pReference = (XFILENAME *)XNewPtr((long)sizeof(XFILENAME));
     if (pReference)
@@ -4360,7 +4359,7 @@ XBOOL XGetResourceName(XResourceType resourceType, XLongResourceID resourceID,
     return FALSE;
 }
 XBOOL XGetFileResourceName(XFILE fileRef, XResourceType resourceType,
-                            XLongResourceID resourceID, char cName[256])
+                            XLongResourceID resourceID, char *cName)
 {
     if (cName)
     {
@@ -4600,7 +4599,7 @@ long XCompressPtr(XPTR* compressedDataTarget,
                     XCompressStatusProc proc, void* procData)
 {
 XPTR            compressedData;
-long            compressedSize;
+long            compressedSize = 0;
 XBYTE           *realData;
 
     if (!compressedDataTarget)

@@ -1114,14 +1114,14 @@ void GM_SetReverbType(ReverbMode reverbMode)
                         {
                             pVoice->avoidReverb = FALSE;
                         }
-                        pVoice->reverbLevel = pVoice->pSong->channelReverb[pVoice->NoteChannel];    // set current verb level
-                        pVoice->chorusLevel = (INT16)PV_ModifyVelocityFromCurve(pVoice->pSong, pVoice->pSong->channelChorus[pVoice->NoteChannel]);
+                        pVoice->reverbLevel = pVoice->pSong->channelReverb[(XBYTE)pVoice->NoteChannel];    // set current verb level
+                        pVoice->chorusLevel = (INT16)PV_ModifyVelocityFromCurve(pVoice->pSong, pVoice->pSong->channelChorus[(XBYTE)pVoice->NoteChannel]);
                                                                             // wants no verb enabled
                         if (GM_IsReverbFixed())
                         {
                             // if the instrument defines reverb on or the channel has reverb on, then enable it.
                             // if the channel is off, but the instrument defines reverb then enable it
-                            if (pVoice->pSong->channelReverb[pVoice->NoteChannel] < GM_GetReverbEnableThreshold())
+                            if (pVoice->pSong->channelReverb[(XBYTE)pVoice->NoteChannel] < GM_GetReverbEnableThreshold())
                             {
                                 pVoice->avoidReverb = TRUE;     // force off
                             }

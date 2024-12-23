@@ -1346,7 +1346,7 @@ static GM_Waveform* PV_ReadIntoMemoryWaveFile(XFILE file, XBOOL decodeData,
         if (wave)
         {
         XWaveHeaderIMA      waveHeader;
-        unsigned long       size, sourceLength;
+        unsigned long       size, sourceLength = 0;
 
             if ((IFF_FileType(pIFF) == X_WAVE) &&
                 (IFF_GetWAVIMAHeader(pIFF, &waveHeader) == 0))
@@ -2864,6 +2864,8 @@ void * GM_CreateFileState(AudioFileType fileType)
                 ((SunDecodeState *)state)->bits = 0;
             }
             break;
+        default:
+            break;
     }
     return state;
 }
@@ -2874,6 +2876,8 @@ void GM_DisposeFileState(AudioFileType fileType, void *state)
     {
         case FILE_AU_TYPE:
             XDisposePtr((XPTR)state);
+            break;
+        default:
             break;
     }
 }
@@ -3346,6 +3350,8 @@ OPErr GM_ReadAndDecodeFileStream(XFILE fileReference,
                         break;
                 }
                 break;
+            default:
+                break;
         }
         if (calculateFileSize && fileReference)
         {
@@ -3379,8 +3385,6 @@ OPErr GM_WriteFileFromMemory(XFILENAME *file, GM_Waveform const* pAudioData, Aud
 #if USE_CREATION_API == TRUE
     OPErr   err;
 
-    file;
-    pAudioData;
     err = NO_ERR;
     switch (fileType)
     {

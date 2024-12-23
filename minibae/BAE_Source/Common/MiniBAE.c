@@ -560,6 +560,8 @@ AudioFileType BAE_TranslateBAEFileType(BAEFileType fileType)
         case BAE_AU_TYPE:
             haeFileType = FILE_AU_TYPE;
             break;
+        default:
+            break;
     }
     return haeFileType;
 }
@@ -1263,7 +1265,7 @@ BAEResult BAEMixer_Open(BAEMixer mixer,
             }
 #endif
             theRate = (Rate)q;
-            if (theRate == BAE_RATE_INVALID)
+            if (theRate == (Rate)BAE_RATE_INVALID)
             {
                 theErr = PARAM_ERR;
             }
@@ -1899,7 +1901,7 @@ BAEResult BAEMixer_ChangeAudioModes(BAEMixer mixer, BAERate q, BAETerpMode t, BA
     if (mixer)
     {
         theRate = (Rate)q;
-        if (theRate == BAE_RATE_INVALID)
+        if (theRate == (Rate)BAE_RATE_INVALID)
         {
             printf("BAEMixer_ChangeAudioModes:invalid rate %ld\n", (long)q);
             err = PARAM_ERR;
@@ -2857,8 +2859,8 @@ BAEResult BAEMixer_StartOutputToFile(BAEMixer theMixer,
     XFILENAME       theFile;
 
 // begin block added for MiniBAE 11/29/00 tom
-    BAEAudioModifiers theModifiers;
-    BAERate theRate;
+    BAEAudioModifiers theModifiers = 0;
+    BAERate theRate = 0;
     BAEResult err;
 // end block added for MiniBAE
 
@@ -2941,8 +2943,6 @@ BAEResult BAEMixer_StartOutputToFile(BAEMixer theMixer,
                 theErr = PARAM_ERR;
             }
         } break;
-#else
-        compressionType;
 #endif
         case BAE_WAVE_TYPE:
         case BAE_AIFF_TYPE:
@@ -3077,7 +3077,7 @@ BAEResult BAEMixer_ServiceAudioOutputToFile(BAEMixer theMixer)
     OPErr                       theErr;
 
 // begin block added for MiniBAE
-    BAEAudioModifiers theModifiers;
+    BAEAudioModifiers theModifiers = 0;
     BAEMixer_GetModifiers(theMixer, &theModifiers);
 // end block added for MiniBAE
 
@@ -4914,7 +4914,7 @@ BAEResult       BAEStream_GetLoopFlag(BAEStream stream, BAE_BOOL *outLoop)
 BAEResult           BAEStream_GetInfo(BAEStream stream,
                             BAESampleInfo *outInfo)
 {
-    BAEResult   err;
+    BAEResult   err = 0;
 
     if (stream)
     {
@@ -4924,7 +4924,7 @@ BAEResult           BAEStream_GetInfo(BAEStream stream,
         }
         else
         {
-            BAE_PARAM_ERR;
+            err = BAE_PARAM_ERR;
         }
     }
     else
@@ -5786,7 +5786,7 @@ BAEResult BAESong_GetMemoryUsed(BAESong song, unsigned long *pOutResult)
 static BAEResult PV_BAESong_InitLiveSong(BAESong song, BAE_BOOL addToMixer)
 {
     OPErr err;
-    short int maxSongVoices, maxEffectVoices, mixLevel;
+    short int maxSongVoices = 0, maxEffectVoices = 0, mixLevel = 0;
 
     err = NO_ERR;
     if (song)
@@ -6066,7 +6066,7 @@ BAEResult BAESong_LoadMidiFromMemory(BAESong song, void const* pMidiData, unsign
     OPErr               theErr;
     XShortResourceID    theID;
     GM_Song             *pSong;
-    short               soundVoices, midiVoices, mixLevel;
+    short               soundVoices = 0, midiVoices = 0, mixLevel = 0;
     char                *title;
 
     theErr = NO_ERR;
@@ -6168,7 +6168,7 @@ BAEResult BAESong_LoadMidiFromFile(BAESong song, BAEPathName filePath, BAE_BOOL 
     OPErr               theErr;
     XShortResourceID    theID;
     GM_Song             *pSong;
-    short               soundVoices, midiVoices, mixLevel;
+    short               soundVoices = 0, midiVoices = 0, mixLevel = 0;
 
     theErr = NO_ERR;
     if ( (song) && (song->mID == OBJECT_ID) )
@@ -7021,11 +7021,11 @@ BAEResult BAESong_NoteOnWithLoad(BAESong song,
                             unsigned long time)
 {
     BAE_INSTRUMENT  inst;
-    unsigned char   program, bank;
-    BAEMixer        mixer;
+    unsigned char   program = 0, bank = 0;
+    BAEMixer        mixer = 0;
     OPErr           err;
-    BAE_BOOL        isLoaded;
-    unsigned long   latency;
+    BAE_BOOL        isLoaded = 0;
+    unsigned long   latency = 0;
     
     err = NO_ERR;
     if ( (song) && (song->mID == OBJECT_ID) )

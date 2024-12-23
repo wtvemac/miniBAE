@@ -34,7 +34,7 @@
 **
 **  Generalized Music Synthesis package. Part of SoundMusicSys.
 **
-**  © Copyright 1993-2001 Beatnik, Inc, All Rights Reserved.
+**  ï¿½ Copyright 1993-2001 Beatnik, Inc, All Rights Reserved.
 **  Written by Steve Hales and Jim Nitchals
 **
 **  Beatnik products contain certain trade secrets and confidential and
@@ -914,7 +914,7 @@ void GM_SetSongMetaEventCallback(GM_Song *theSong, GM_SongMetaCallbackProcPtr th
 }
 
 
-#if X_PLATFORM != X_WEBTV
+#if X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
 // This will return realtime information about the current set of notes being playing right now.
 void GM_GetRealtimeAudioInformation(GM_AudioInfo *pInfo)
 {
@@ -959,7 +959,7 @@ void GM_GetRealtimeAudioInformation(GM_AudioInfo *pInfo)
         XSetMemory((void *)pInfo, (long)sizeof(GM_AudioInfo), 0);
     }
 }
-#endif  // X_PLATFORM != X_WEBTV
+#endif  // X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
 
 
 static void PV_CallControlCallbacks(void *threadContext, GM_Song *pSong, short int channel, short int track, short int controler, unsigned short value)
@@ -2774,7 +2774,7 @@ static void PV_ProcessExternalMIDIQueue(GM_Song *pSong)
             }
             switch (event.command)
             {
-                case B_NOTE_ON:                 // ¥¥ Note On
+                case B_NOTE_ON:                 // ï¿½ï¿½ Note On
 #ifdef EVENT_DEBUG
                     if (qindex < 5000) {
                         if (event.byte2 > 0)
@@ -2785,13 +2785,13 @@ static void PV_ProcessExternalMIDIQueue(GM_Song *pSong)
 #endif
                     PV_ProcessNoteOn(pSong, event.midiChannel, -1, event.byte1, event.byte2);
                     break;
-                case B_NOTE_OFF:                    // ¥¥ Note Off
+                case B_NOTE_OFF:                    // ï¿½ï¿½ Note Off
 #ifdef EVENT_DEBUG
                     if (qindex < 5000) sprintf(msgQueue[qindex++].s, "note off %d  time %d\n", event.byte1, event.timeStamp);
 #endif
                     PV_ProcessNoteOff(pSong, event.midiChannel, -1, event.byte1, event.byte2);
                     break;
-                case 0xB0:                  // ¥¥ Control Change
+                case 0xB0:                  // ï¿½ï¿½ Control Change
 #ifdef EVENT_DEBUG              
                     if (event.byte1 == 123) { 
                       int n;
@@ -2807,10 +2807,10 @@ static void PV_ProcessExternalMIDIQueue(GM_Song *pSong)
 #endif
                     PV_ProcessController(pSong, event.midiChannel, -1, event.byte1, event.byte2);
                     break;
-                case B_PROGRAM_CHANGE:                  // ¥¥ ProgramChange
+                case B_PROGRAM_CHANGE:                  // ï¿½ï¿½ ProgramChange
                     PV_ProcessProgramChange(pSong, event.midiChannel, -1, event.byte1);
                     break;
-                case B_PITCH_BEND:                  // ¥¥ SetPitchBend
+                case B_PITCH_BEND:                  // ï¿½ï¿½ SetPitchBend
                     PV_ProcessPitchBend(pSong, event.midiChannel, -1, event.byte1, event.byte2);
                     break;
             }
@@ -2822,7 +2822,7 @@ static void PV_ProcessExternalMIDIQueue(GM_Song *pSong)
 Igor Meta events
 FF 7F len data -    This is the standard sequencer specific data block. We can use it this way. Sequencers 
                     ignore this data, but will not let you edit it in any way. I've tried other meta id's and 
-                    the results are the same.  Most donÕt even display that its present. But it does allow 
+                    the results are the same.  Most donï¿½t even display that its present. But it does allow 
                     us to work with blocks of 8 bit data. The only way we can set it up for a sequencer 
                     to copy and paste our block is to make it a sysex. Which means 7 bit bytes! Ug!
 
@@ -2834,7 +2834,7 @@ Byte    Data Type
 
 FLUS - command
 {
-11      flush current instruments (default, you donÕt need to send this)
+11      flush current instruments (default, you donï¿½t need to send this)
 }
 
 CACH - command
@@ -2866,7 +2866,7 @@ LENGTH
 DATA
 
 SONG    Igor Standard song performance resource
-ID      DoesnÕt matter. Should only be one song per midi file
+ID      Doesnï¿½t matter. Should only be one song per midi file
 NAME    pascal string containing resource name
 LENGTH
 DATA
@@ -3206,7 +3206,7 @@ static UINT32 PV_ReadVariableLengthMidi(UBYTE **ppMidiStream)
         } while (c & 0x80);
     }
 */
-    value = 0;                  // read length andÉ
+    value = 0;                  // read length andï¿½
     while (*midi_stream & 0x80)
     {
         value = value << 7;  
@@ -3410,17 +3410,17 @@ GetMIDIevent:
             MIDIChannel = midi_byte & 0xF;
             switch (midi_byte & 0xF0)           // process commands
             {
-                case 0x90:                  // ¥¥ Note On
+                case 0x90:                  // ï¿½ï¿½ Note On
                     value = *midi_stream++;     // MIDI note
                     volume = *midi_stream++;    // note on velocity
                     PV_ProcessNoteOn(pSong, MIDIChannel, (XSWORD)currentTrack, (XSWORD)value, (XSWORD)volume);
                     break;
-                case 0x80:                  // ¥¥ Note Off
+                case 0x80:                  // ï¿½ï¿½ Note Off
                     value = *midi_stream++;     // MIDI note
                     volume = *midi_stream++;    // note off velocity, ignore for now
                     PV_ProcessNoteOff(pSong, MIDIChannel, (XSWORD)currentTrack, (XSWORD)value, (XSWORD)volume);
                     break;
-                case 0xB0:                  // ¥¥ Control Change
+                case 0xB0:                  // ï¿½ï¿½ Control Change
                     controler = *midi_stream++; // control #
 #if 0 && USE_CREATION_API == TRUE
                     if (controler == 0 && (pSong->AnalyzeMode == SCAN_COUNT_PATCHES || pSong->AnalyzeMode == SCAN_FIND_PATCHES))
@@ -3442,7 +3442,7 @@ GetMIDIevent:
                         PV_CallControlCallbacks(threadContext, pSong, MIDIChannel, (XSWORD)currentTrack, (XSWORD)controler, (XSWORD)midi_byte);
                     }
                     break;
-                case 0xC0:                  // ¥¥ ProgramChange
+                case 0xC0:                  // ï¿½ï¿½ ProgramChange
                     value = *midi_stream;
 #if 0 && USE_CREATION_API == TRUE
                     if (pSong->AnalyzeMode == SCAN_FIND_PATCHES || pSong->AnalyzeMode == SCAN_COUNT_PATCHES)
@@ -3469,19 +3469,19 @@ GetMIDIevent:
                     }
 #endif
                     break;
-                case 0xE0:                  // ¥¥ SetPitchBend
+                case 0xE0:                  // ï¿½ï¿½ SetPitchBend
                     valueLSB = *midi_stream++;
                     valueMSB = *midi_stream++;
                     PV_ProcessPitchBend(pSong, MIDIChannel, (XSWORD)currentTrack, valueMSB, valueLSB);
                     break;
-                case 0xA0:                  // ¥¥  Key Pressure
+                case 0xA0:                  // ï¿½ï¿½  Key Pressure
                     midi_stream += 2;       // note, key pressure
                     break;
-                case 0xD0:                  // ¥¥ ChannelPressure
+                case 0xD0:                  // ï¿½ï¿½ ChannelPressure
                     midi_stream++;
                     break;
-                case 0xF7:                  // ¥¥ System Exclusive
-                case 0xF0:                  // ¥¥ System Exclusive
+                case 0xF7:                  // ï¿½ï¿½ System Exclusive
+                case 0xF0:                  // ï¿½ï¿½ System Exclusive
                     temp_midi_stream = midi_stream;
                     value = PV_ReadVariableLengthMidi(&temp_midi_stream);
                     midi_stream = temp_midi_stream;

@@ -224,7 +224,7 @@ void PV_Generate8outputMono(OUTSAMPLE8 * dest8)
 void PV_Generate16outputStereo(OUTSAMPLE16 * dest16)
 {
     register LOOPCOUNT  count;
-#if X_PLATFORM != X_WEBTV
+#if X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
     register INT32      b, c;
 #endif
     register INT32      *sourceLR;
@@ -319,7 +319,7 @@ void PV_Generate16outputStereo(OUTSAMPLE16 * dest16)
             }
         }
     }
-#if X_PLATFORM != X_WEBTV
+#if X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
     else
     {
         // 11k terped to 22k, and 22k terped to 44k
@@ -389,7 +389,7 @@ void PV_Generate16outputStereo(OUTSAMPLE16 * dest16)
             dest16 += 16;
         }
     }
-#endif  // X_PLATFORM != X_WEBTV
+#endif  // X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
 }
 #endif  // (USE_16_BIT_OUTPUT == TRUE) && (USE_STEREO_OUTPUT == TRUE)
 

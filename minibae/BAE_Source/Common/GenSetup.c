@@ -709,7 +709,7 @@ OPErr GM_InitGeneralSound(void *threadContext, Rate theRate, TerpMode theTerp, A
 
 // $$kk: 08.12.98 merge: changed this method
 // $$kk: 01.26.98: changed this to only start and stop the device if it is opened,
-#if X_PLATFORM != X_WEBTV
+#if X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
 OPErr GM_ChangeAudioModes(void *threadContext, 
                             Rate theRate, TerpMode theTerp, AudioModifiers theMods)
 {
@@ -846,7 +846,7 @@ OPErr GM_ChangeAudioModes(void *threadContext,
     }
     return theErr;
 }
-#endif  // X_PLATFORM != X_WEBTV
+#endif  // X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
 
 
 void GM_FinisGeneralSound(void *threadContext, GM_Mixer *mixer)

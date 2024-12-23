@@ -243,7 +243,7 @@
 */
 
 
-#if X_PLATFORM != X_WEBTV
+#if X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
 // Process any fading effects voices
 static void PV_ServeEffectsFades(void)
 {
@@ -338,7 +338,7 @@ static void PV_ServeEffectCallbacks(void *threadContext)
 // process all sample events. Fades, callbacks, etc
 void PV_ProcessSampleEvents(void *threadContext)
 {
-    #if X_PLATFORM != X_WEBTV
+    #if X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
         PV_ServeEffectsFades();
     #endif
     #if USE_CALLBACKS
@@ -347,7 +347,7 @@ void PV_ProcessSampleEvents(void *threadContext)
 }
 
 
-#if X_PLATFORM != X_WEBTV
+#if X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
 // range is 0 to MAX_MASTER_VOLUME (256). Note volume is from 0 to MAX_NOTE_VOLUME (127)
 void GM_SetEffectsVolume(INT16 newVolume)
 {
@@ -742,7 +742,7 @@ VOICE_REFERENCE GM_SetupSample(XPTR theData, UINT32 startFrame, UINT32 frames, X
     return DEAD_VOICE;
 }
 
-#if X_PLATFORM != X_WEBTV
+#if X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
 // stereoPosition is in the range 63 to -63
 VOICE_REFERENCE GM_SetupSampleFromInfo(GM_Waveform *pSample, void *context,
                                 INT32 sampleVolume, INT32 stereoPosition,
@@ -913,7 +913,7 @@ void GM_EndAllSamples(void)
 }
 
 
-#if X_PLATFORM != X_WEBTV
+#if X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
 
 unsigned long GM_GetSampleStartTimeStamp(VOICE_REFERENCE reference)
 {
@@ -996,7 +996,7 @@ void GM_SetSampleDoneCallback(VOICE_REFERENCE reference, GM_SoundDoneCallbackPtr
 }
 #endif
 
-#if X_PLATFORM != X_WEBTV
+#if X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
 XFIXED GM_GetSamplePitch(VOICE_REFERENCE reference)
 {
     XFIXED      rate;
@@ -1263,7 +1263,7 @@ void GM_ChangeSampleVolume(VOICE_REFERENCE reference, INT16 sampleVolume)
     }
 }
 
-#if X_PLATFORM != X_WEBTV
+#if X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
 void GM_SetSampleLoopPoints(VOICE_REFERENCE reference, unsigned long start, unsigned long end)
 {
     register GM_Voice   *pVoice;
@@ -1645,7 +1645,7 @@ OPErr GM_GetWaveformSampleData(GM_Waveform *pWave, XPTR *outSampleData)
 //                                  FLOAT_TO_XFIXED(2.2) * -1 will increase volume
 //          minVolume   lowest volume level fade will go
 //          maxVolume   highest volume level fade will go
-#if X_PLATFORM != X_WEBTV
+#if X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
 void GM_SetSampleFadeRate(VOICE_REFERENCE reference, XFIXED fadeRate, 
                             INT16 minVolume, INT16 maxVolume, XBOOL endSample)
 {
@@ -1663,7 +1663,7 @@ void GM_SetSampleFadeRate(VOICE_REFERENCE reference, XFIXED fadeRate,
 }
 #endif
 
-#if X_PLATFORM != X_WEBTV
+#if X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
 // range from -63 to 63
 INT16 GM_GetSampleStereoPosition(VOICE_REFERENCE reference)
 {
@@ -1800,7 +1800,7 @@ void GM_RemoveSampleOffsetCallback(VOICE_REFERENCE reference, GM_SampleCallbackE
 #endif
 
 
-#if X_PLATFORM != X_WEBTV
+#if X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
 // group functions
 // new
 // free

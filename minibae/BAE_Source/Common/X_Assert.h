@@ -99,7 +99,7 @@
             #define BAE_VERIFY(exp)     assert(exp)
         #endif
     #else
-        #if (X_PLATFORM == X_WEBTV)
+        #if (X_PLATFORM == X_WEBTV) && (X_PLATFORM != X_LIBWTV)
             #define BAE_PRINTF(...)
             #define BAE_ASSERT(exp)         ((void)0)
             #define BAE_VERIFY(exp)         (exp)

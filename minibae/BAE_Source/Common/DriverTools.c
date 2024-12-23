@@ -1178,7 +1178,7 @@ void XSetSongResourceObjectID(SongResource *pSong, XShortResourceID id)
 }
 #endif  // USE_CREATION_API == TRUE
 
-#if X_PLATFORM != X_WEBTV
+#if X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
 XBOOL XIsSongCompressed(SongResource *pSong)
 {
     XShortResourceID    id;
@@ -1245,7 +1245,7 @@ XBOOL XIsSongLocked(SongResource *pSong)
     }
     return locked;
 }
-#endif  // X_PLATFORM != X_WEBTV
+#endif  // X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
 
 #if USE_CREATION_API == TRUE
 void XSetSongLocked(SongResource *pSong, XBOOL locked)
@@ -1671,7 +1671,7 @@ static void PV_SetStringItemFromResource_info(SongResource_Info *pSongInfo, Song
 #endif
 
 #if USE_FULL_RMF_SUPPORT == TRUE
-#if X_PLATFORM != X_WEBTV
+#if X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
 
 // types used for the two forms of text types. Used in the XGetSongResourceInfo and
 // XNewSongFromSongResourceInfo functions.
@@ -1761,12 +1761,12 @@ SongResource_Info * XGetSongResourceInfo(SongResource *pSong, long songSize)
     }
     return pInfo;
 }
-#endif  // X_PLATFORM != X_WEBTV
+#endif  // X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
 #endif  // USE_FULL_RMF_SUPPORT
 
 // This will create a new song resource from the more accessable SongResource_Info
 #if USE_CREATION_API == TRUE
-#if X_PLATFORM != X_WEBTV
+#if X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
 SongResource * XNewSongFromSongResourceInfo(SongResource_Info *pSongInfo)
 {
     SongResource                    *newSong, *otherNew;
@@ -1834,7 +1834,7 @@ SongResource * XNewSongFromSongResourceInfo(SongResource_Info *pSongInfo)
     }
     return newSong;
 }
-#endif  // X_PLATFORM != X_WEBTV
+#endif  // X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
 
 // return a new blank SongResource_Info structure
 SongResource_Info * XNewSongResourceInfo(void)
@@ -2072,7 +2072,7 @@ XPTR XGetSoundResourceByID(XLongResourceID theID, long *pReturnedSize)
     return theData;
 }
 
-#if X_PLATFORM != X_WEBTV
+#if X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
 // Get sound resource and detach from resource manager or decompress
 // This function can be replaced for a custom sound retriver
 XPTR XGetSoundResourceByName(void *cName, long *pReturnedSize)
@@ -2209,7 +2209,7 @@ void XSetSongVolume(SongResource *pSong, short int volume)
 }
 
 
-#if X_PLATFORM != X_WEBTV
+#if X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
 short int XGetSongReverbType(SongResource *pSong)
 {
     short int       reverbType;
@@ -2229,7 +2229,7 @@ short int XGetSongReverbType(SongResource *pSong)
     }
     return reverbType;
 }
-#endif  //  X_PLATFORM != X_WEBTV
+#endif  //  X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
 
 
 #if USE_CREATION_API == TRUE

@@ -5,7 +5,7 @@
 **	This provides for platform specfic functions that need to be rewitten,
 **	but will provide a API that is stable across all platforms
 **
-**	© Copyright 1995-2000 Beatnik, Inc, All Rights Reserved.
+**	ï¿½ Copyright 1995-2000 Beatnik, Inc, All Rights Reserved.
 **	Written by Steve Hales
 **
 **	Beatnik products contain certain trade secrets and confidential and
@@ -262,6 +262,7 @@
 #define X_NAVIO				7		// NaviOS
 #define X_WIN_HARDWARE		8		// Windows 95 only direct to Sound Blaster hardware
 #define X_WEBTV_CE			9		// WebTV with CE
+#define X_LIBWTV			18      // WebTV with libwtv
 
 
 // types for CPU_TYPE
@@ -352,6 +353,8 @@
 	#include "BAE_BuildOptions_Ansi.h"
 #elif X_PLATFORM == X_STRONGARM
 	#include "BAEBuildOptions_StrongARM.h"
+#elif X_PLATFORM == X_LIBWTV
+    #include "BAEBuildOptions_libwtv.h"
 #endif
 
 //-----------------------------------------------------------------------------------

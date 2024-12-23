@@ -313,6 +313,7 @@
 #define X_EPOC              15      // Symbian Quartz6.0 CPP port
 #define X_MACINTOSH         16      // MacOSX
 #define X_IOS               17      // iOS
+#define X_LIBWTV            18      // WebTV with libwtv
 
 // types for CPU_TYPE
 #define k68000              0
@@ -409,6 +410,8 @@
     #include "BAEBuildOptions_ANSI.h"
 #elif X_PLATFORM == X_EPOC
     #include "BAEBuildOptions_EPOC.h"
+#elif X_PLATFORM == X_LIBWTV
+    #include "BAEBuildOptions_libwtv.h"
 #endif
 
 //-----------------------------------------------------------------------------------

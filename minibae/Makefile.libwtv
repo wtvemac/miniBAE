@@ -9,7 +9,7 @@ MINIBAE_INC += -I$(CURDIR)/external/heyigor/miniBAE/minibae/BAE_Source/Platform
 MINIBAE_INC += -I$(CURDIR)/external/heyigor/miniBAE/minibae/BAE_MPEG_Source_II
 MINIBAE_INC += -I$(CURDIR)/external/heyigor/miniBAE/minibae/banks/patches
 
-SRC := BAE_API_WebTV.c
+SRC := BAE_API_libwtv.c
 
 SRC += \
 	DriverTools.c \
@@ -82,7 +82,7 @@ install-minibae:
 	install -Cv -m 0644 $(CURDIR)/external/heyigor/miniBAE/minibae/BAE_Source/Common/X_PackStructures.h $(INSTALL_DIR)/include/audio/minibae/X_PackStructures.h
 	install -Cv -m 0644 $(CURDIR)/external/heyigor/miniBAE/minibae/BAE_Source/Common/X_UnpackStructures.h $(INSTALL_DIR)/include/audio/minibae/X_UnpackStructures.h
 	install -Cv -m 0644 $(CURDIR)/external/heyigor/miniBAE/minibae/BAE_MPEG_Source_II/XMPEG_BAE_API.h $(INSTALL_DIR)/include/audio/minibae/XMPEG_BAE_API.h
-	install -Cv -m 0644 $(CURDIR)/external/heyigor/miniBAE/minibae/BAE_Source/Platform/BAEBuildOptions_WebTV.h $(INSTALL_DIR)/include/audio/minibae/BAEBuildOptions_WebTV.h
+	install -Cv -m 0644 $(CURDIR)/external/heyigor/miniBAE/minibae/BAE_Source/Platform/BAEBuildOptions_libwtv.h $(INSTALL_DIR)/include/audio/minibae/BAEBuildOptions_libwtv.h
 
 clean-minibae:
 	@rm -f $(TARGET)

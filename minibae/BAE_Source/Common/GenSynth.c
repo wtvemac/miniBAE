@@ -2653,7 +2653,7 @@ void PV_ProcessSampleFrame(void *threadContext, void *destinationSamples)
         }
 #endif
 
-#if (X_PLATFORM == X_WEBTV)
+#if (X_PLATFORM == X_WEBTV) && (X_PLATFORM != X_LIBWTV)
 // For WebTV, we keep MOD support simple. Verb is always enabled, and we call the Mod sample generation
 // code. If at some time in the future you (WebTV) want to support enbled to disabled verb, this code
 // will need to be duplicated here below and wrapped around a boolean for enabling or disabling verb.

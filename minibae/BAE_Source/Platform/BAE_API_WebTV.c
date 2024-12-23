@@ -109,15 +109,6 @@
 */
 /*****************************************************************************/
 
-#include <stdio.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <stdarg.h>
-#include <stdlib.h>
-#include <sys/time.h>
-#include <pthread.h>
-#include <assert.h>
-
 #include "BAE_API.h"
 
 
@@ -126,33 +117,6 @@
 #define TRUE                            1
 #define FALSE                           0
 
-
-#define BAE_FRAMES_PER_BLOCK            3                                                       // how much ms latancy can we handle (in ms)
-
-typedef struct
-{
-    // hardware volume in BAE scale
-    short int                       mUnscaledVolume;
-    // balance scale -256 to 256 (left to right)
-    short int                       mBalance;
-    
-    // size of audio buffers in bytes
-    long                            mAudioByteBufferSize;
-    
-    char                            mDataReady;
-    char                            mDonePlaying;
-    char                            mShutdownDoubleBuffer;
-    
-    // number of samples per audio frame to generate
-    long                            mAudioFramesToGenerate;
-    
-    // How many audio frames to generate at one time
-    unsigned int                    mSynthFramesPerBlock;
-    unsigned long                   mSamplesPlayed;
-
-} AudioControlData;
-
-static AudioControlData* sHardwareChannel;
 
 // This file contains API's that need to be defined in order to get BAE (IgorAudio)
 // to link and compile.
@@ -184,20 +148,17 @@ void *BAE_Allocate(unsigned long size)
 // dispose of memory allocated with BAE_Allocate
 void BAE_Deallocate(void *memoryBlock)
 {
-
 }
 
 // return memory used
 unsigned long BAE_GetSizeOfMemoryUsed(void)
 {
-//  return g_memory_buoy;
    return(0);
 }
 
 // return max memory used
 unsigned long BAE_GetMaxSizeOfMemoryUsed(void)
 {
-//  return g_memory_buoy_max;
    return(0);
 }
 
@@ -209,175 +170,92 @@ unsigned long BAE_GetMaxSizeOfMemoryUsed(void)
 // return 0 for valid, or 1 for bad pointer, or 2 for not supported.
 int BAE_IsBadReadPointer(void *memoryBlock, unsigned long size)
 {
-   memoryBlock = memoryBlock;
-   size        = size;
-   return(2);           // not supported, so this assumes that we don't have memory protection and will
-   // not get an access violation when accessing memory outside of a valid memory block
+    return(0);
 }
 
 // this will return the size of the memory pointer allocated with BAE_Allocate. Return
 // 0 if you don't support this feature
 unsigned long BAE_SizeOfPointer(void *memoryBlock)
 {
-   unsigned long size = 0;
-
-   return(size);
+    return(0);
 }
 
 // block move memory. This is basicly memmove, but its exposed to take advantage of
 // special block move speed ups, various hardware has available.
 void BAE_BlockMove(void *source, void *dest, unsigned long size)
 {
-
 }
 
 // **** Audio Card modifiers
 // Return 1 if stereo hardware is supported, otherwise 0.
 int BAE_IsStereoSupported(void)
 {
-    return 1;
+    return(1);
 }
 
 // Return 1, if sound hardware support 16 bit output, otherwise 0.
 int BAE_Is16BitSupported(void)
 {
-    return 1;
+    return(1);
 }
 
 // Return 1, if sound hardware support 8 bit output, otherwise 0.
 int BAE_Is8BitSupported(void)
 {
-    return 1;
+    return(1);
 }
 
 // returned balance is in the range of -256 to 256. Left to right. If you're hardware doesn't support this
 // range, just scale it.
 short int BAE_GetHardwareBalance(void)
 {
-    if (sHardwareChannel)
-    {
-        return sHardwareChannel->mBalance;
-    }
-    return 0;
+    return(0);
 }
 
 // 'balance' is in the range of -256 to 256. Left to right. If you're hardware doesn't support this
 // range, just scale it.
 void BAE_SetHardwareBalance(short int balance)
 {
-   // pin balance to box
-   if (balance > 256)
-   {
-      balance = 256;
-   }
-   if (balance < -256)
-   {
-      balance = -256;
-   }
-   if (sHardwareChannel)
-   {
-       sHardwareChannel->mBalance = balance;
-       BAE_SetHardwareVolume(sHardwareChannel->mUnscaledVolume);
-   }
 }
 
 // returned volume is in the range of 0 to 256
 short int BAE_GetHardwareVolume(void)
 {
-    if (sHardwareChannel)
-    {
-        return sHardwareChannel->mUnscaledVolume;
-    }
-    return 256;
+    return(0);
 }
 
 // theVolume is in the range of 0 to 256
 void BAE_SetHardwareVolume(short int newVolume)
 {
-   unsigned long volume;
-   short int     lbm, rbm;
-
-   // pin volume
-   if (newVolume > 256)
-   {
-      newVolume = 256;
-   }
-   if (newVolume < 0)
-   {
-      newVolume = 0;
-   }
-    sHardwareChannel->mUnscaledVolume = newVolume;
-
-   // calculate balance multipliers
-   if (sHardwareChannel->mBalance > 0)
-   {
-      lbm = 256 - sHardwareChannel->mBalance;
-      rbm = 256;
-   }
-   else
-   {
-      lbm = 256;
-      rbm = 256 + sHardwareChannel->mBalance;
-   }
-
-   volume = (((newVolume * lbm) / 256) << 16L) | ((newVolume * rbm) / 256);             // keep scale at 0 to 256
-#warning BAE_SetHardwareVolume not implemented
 }
 
 // **** Timing services
 // return microseconds
 unsigned long BAE_Microseconds(void)
 {
-   static int           firstTime = TRUE;
-   static unsigned long offset    = 0;
-   struct timeval       tv;
-
-   if (firstTime)
-   {
-      gettimeofday(&tv, NULL);
-      offset    = tv.tv_sec;
-      firstTime = FALSE;
-   }
-   gettimeofday(&tv, NULL);
-   return(((tv.tv_sec - offset) * 1000000UL) + tv.tv_usec);
+    return(0);
 }
 
 // wait or sleep this thread for this many microseconds
 void BAE_WaitMicroseconds(unsigned long usec)
 {
-   usleep(usec);
 }
 
 int BAE_NewMutex(BAE_Mutex* lock, char *name, char *file, int lineno)
 {
-    pthread_mutex_t *pMutex = (pthread_mutex_t *) BAE_Allocate(sizeof(pthread_mutex_t));
-    pthread_mutexattr_t attrib;
-    pthread_mutexattr_init(&attrib);
-    pthread_mutexattr_settype(&attrib, PTHREAD_MUTEX_RECURSIVE);
-    // Create reentrant (within same thread) mutex.
-    pthread_mutex_init(pMutex, &attrib);
-    pthread_mutexattr_destroy(&attrib);
-    *lock = (BAE_Mutex) pMutex;
-    return 1; // ok
+    return(0);
 }
 
 void BAE_AcquireMutex(BAE_Mutex lock)
 {
-    pthread_mutex_t *pMutex = (pthread_mutex_t*) lock;
-    pthread_mutex_lock(pMutex);
 }
 
 void BAE_ReleaseMutex(BAE_Mutex lock)
 {
-    pthread_mutex_t *pMutex = (pthread_mutex_t*) lock;
-    pthread_mutex_unlock(pMutex);
 }
 
 void BAE_DestroyMutex(BAE_Mutex lock)
 {
-    pthread_mutex_t *pMutex = (pthread_mutex_t*) lock;
-    pthread_mutex_destroy(pMutex);
-    BAE_Deallocate(pMutex);
 }
 
 
@@ -385,7 +263,6 @@ void BAE_DestroyMutex(BAE_Mutex lock)
 // rendering without threads.
 void BAE_Idle(void *userContext)
 {
-//  userContext = userContext;
 }
 
 // **** File support
@@ -396,49 +273,15 @@ void BAE_Idle(void *userContext)
 // in the native format to the pointer passed fileNameDest.
 void BAE_CopyFileNameNative(void *fileNameSource, void *fileNameDest)
 {
-    char *dest;
-    char *src;
-    
-    if ((fileNameSource) && (fileNameDest))
-    {
-        dest = (char *)fileNameDest;
-        src  = (char *)fileNameSource;
-        if (src == NULL)
-        {
-            src = "";
-        }
-        if (dest)
-        {
-            while (*src)
-            {
-                *dest++ = *src++;
-            }
-            *dest = 0;
-        }
-    }
 }
 
 long BAE_FileCreate(void *fileName)
 {
-    int file;
-    
-    file = open((char *)fileName, O_CREAT | O_TRUNC | O_RDWR);
-    if (file != -1)
-    {
-        close(file);
-    }
-    return((file != -1) ? 0 : -1);  
+    return(-1);
 }
 
 long BAE_FileDelete(void *fileName)
 {
-    if (fileName)
-    {
-        if (remove(fileName))
-        {
-            return(0);
-        }
-    }
     return(-1);
 }
 
@@ -447,45 +290,28 @@ long BAE_FileDelete(void *fileName)
 // Return -1 if error, otherwise file handle
 long BAE_FileOpenForRead(void *fileName)
 {
-    if (fileName)
-    {
-        return(open((char *)fileName, O_RDONLY));
-    }
     return(-1);
 }
 
 long BAE_FileOpenForWrite(void *fileName)
 {
-    if (fileName)
-    {
-        return(open((char *)fileName, O_WRONLY | O_CREAT | O_TRUNC));
-    }
     return(-1);
 }
 
 long BAE_FileOpenForReadWrite(void *fileName)
 {
-    if (fileName)
-    {
-        return(open((char *)fileName, O_RDWR));
-    }
     return(-1);
 }
 
 // Close a file
 void BAE_FileClose(long fileReference)
 {
-    close(fileReference);
 }
 
 // Read a block of memory from a file.
 // Return -1 if error, otherwise length of data read.
 long BAE_ReadFile(long fileReference, void *pBuffer, long bufferLength)
 {
-    if ((pBuffer) && (bufferLength))
-    {
-        return(read(fileReference, (char *)pBuffer, bufferLength));
-    }
     return(-1);
 }
 
@@ -493,10 +319,6 @@ long BAE_ReadFile(long fileReference, void *pBuffer, long bufferLength)
 // Return -1 if error, otherwise length of data written.
 long BAE_WriteFile(long fileReference, void *pBuffer, long bufferLength)
 {
-    if ((pBuffer) && (bufferLength))
-    {
-        return(write(fileReference, (char *)pBuffer, bufferLength));
-    }
     return(-1);
 }
 
@@ -504,23 +326,19 @@ long BAE_WriteFile(long fileReference, void *pBuffer, long bufferLength)
 // Return -1 if error, otherwise 0.
 long BAE_SetFilePosition(long fileReference, unsigned long filePosition)
 {
-    return((lseek(fileReference, filePosition, SEEK_SET) == -1) ? -1 : 0);
+    return(-1);
 }
 
 // get file position in absolute file bytes
 unsigned long BAE_GetFilePosition(long fileReference)
 {
-    return(lseek(fileReference, 0, SEEK_CUR));
+    return(0);
 }
 
 // get length of file
 unsigned long BAE_GetFileLength(long fileReference)
 {
-    unsigned long pos;
-
-    pos = lseek(fileReference, 0, SEEK_END);
-    lseek(fileReference, 0, SEEK_SET);
-    return(pos);
+    return(0);
 }
 
 // set the length of a file. Return 0, if ok, or -1 for error
@@ -538,50 +356,6 @@ void BAE_ProcessRouteBus(int currentRoute, long *pChannels, int count)
 
 static void PV_ClearOutputBuffer(void *pBuffer, short int channels, short int bits, unsigned long frames)
 {
-    short int count;
-    char      *dest8;
-    short int *dest16;
-    
-    if (bits == 16)
-    {
-        // use 16 bit output
-        dest16 = (short int *)pBuffer;
-        for (count = 0; count < frames / 4; count++)
-        {
-            *dest16++ = 0;
-            *dest16++ = 0;
-            *dest16++ = 0;
-            *dest16++ = 0;
-            if (channels == 2)
-            {
-                // this is a slow way to do this!
-                *dest16++ = 0;
-                *dest16++ = 0;
-                *dest16++ = 0;
-                *dest16++ = 0;
-            }
-        }
-    }
-    else
-    {
-        // use 8 bit output
-        dest8 = (char *)pBuffer;
-        for (count = 0; count < frames / 4; count++)
-        {
-            *dest8++ = 0x80;
-            *dest8++ = 0x80;
-            *dest8++ = 0x80;
-            *dest8++ = 0x80;
-            if (channels == 2)
-            {
-                // this is a slow way to do this!
-                *dest8++ = 0x80;
-                *dest8++ = 0x80;
-                *dest8++ = 0x80;
-                *dest8++ = 0x80;
-            }
-        }
-    }
 }
 
 
@@ -589,26 +363,24 @@ static void QueueStoppedProc(void* inUserData,
                        void* AQ,
                        unsigned long ID)
 {
-
 }
 
 static void QueueCallbackProc(void* inUserData,
                                     void* AQ,
                                     void* CompleteAQBuffer) 
 {
-
 }
 
 // Return the number of 11 ms buffer blocks that are built at one time.
 int BAE_GetAudioBufferCount(void)
 {
-   return(sHardwareChannel->mSynthFramesPerBlock);
+   return(0);
 }
 
 // Return the number of bytes used for audio buffer for output to card
 long BAE_GetAudioByteBufferSize(void)
 {
-   return(sHardwareChannel->mAudioByteBufferSize);
+   return(0);
 }
 
 // Mute/unmute audio. Shutdown amps, etc.
@@ -635,13 +407,13 @@ int BAE_AquireAudioCard(void *threadContext, unsigned long sampleRate, unsigned 
 // return 0 if ok, -1 if failed.
 int BAE_ReleaseAudioCard(void *threadContext)
 {
-    return 0;
+    return(0);
 }
 
 // return device position in samples
 unsigned long BAE_GetDeviceSamplesPlayedPosition(void)
 {
-   return(sHardwareChannel->mSamplesPlayed);
+    return(0);
 }
 
 
@@ -659,15 +431,12 @@ long BAE_MaxDevices(void)
 //          in order for the change to take place.
 void BAE_SetDeviceID(long deviceID, void *deviceParameter)
 {
-   deviceID;
-   deviceParameter;
 }
 
 // return current device ID
 // NOTE: This function needs to function before any other calls may have happened.
 long BAE_GetDeviceID(void *deviceParameter)
 {
-   deviceParameter;
    return(0);
 }
 
@@ -682,7 +451,6 @@ long BAE_GetDeviceID(void *deviceParameter)
 //          "WinOS,plugin,Director"
 void BAE_GetDeviceName(long deviceID, char *cName, unsigned long cNameLength)
 {
-
 }
 
 

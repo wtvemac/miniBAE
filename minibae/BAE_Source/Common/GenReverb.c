@@ -156,6 +156,8 @@ static void PV_RunMonoFixedReverb(ReverbMode which)
                     case Q_RATE_48K:
                         a = 5;
                         break;
+                    default:
+                        break;
                 }
                 reverbPtr2 = (MusicGlobals->reverbPtr - 632*a) & REVERB_BUFFER_MASK; 
                 reverbPtr3 = (MusicGlobals->reverbPtr - 450*a) & REVERB_BUFFER_MASK;
@@ -196,6 +198,8 @@ static void PV_RunMonoFixedReverb(ReverbMode which)
                     case Q_RATE_48K:
                         a = 5;
                         break;
+                    default:
+                        break;
                 }
                 reverbPtr2 = (MusicGlobals->reverbPtr - 632*a) & REVERB_BUFFER_MASK; 
                 reverbPtr3 = (MusicGlobals->reverbPtr - 430*a) & REVERB_BUFFER_MASK;
@@ -234,6 +238,8 @@ static void PV_RunMonoFixedReverb(ReverbMode which)
                         break;
                     case Q_RATE_48K:
                         a = 5;
+                        break;
+                    default:
                         break;
                 }
                 reverbPtr2 = (MusicGlobals->reverbPtr - 1100*a) & REVERB_BUFFER_MASK; 
@@ -276,6 +282,8 @@ static void PV_RunMonoFixedReverb(ReverbMode which)
                     case Q_RATE_48K:
                         a = 5;
                         break;
+                    default:
+                        break;
                 }
                 reverbPtr2 = (MusicGlobals->reverbPtr - 500*a) & REVERB_BUFFER_MASK; 
                 reverbPtr3 = (MusicGlobals->reverbPtr - 674*a) & REVERB_BUFFER_MASK;
@@ -315,6 +323,8 @@ static void PV_RunMonoFixedReverb(ReverbMode which)
                     case Q_RATE_48K:
                         a = 9;
                         break;
+                    default:
+                        break;
                 }
                 reverbPtr2 = (MusicGlobals->reverbPtr - 2700/2*a) & REVERB_BUFFER_MASK; 
                 reverbPtr3 = (MusicGlobals->reverbPtr - 3250/2*a) & REVERB_BUFFER_MASK;
@@ -352,6 +362,8 @@ static void PV_RunMonoFixedReverb(ReverbMode which)
                         break;
                     case Q_RATE_48K:
                         a = 5;
+                        break;
+                    default:
                         break;
                 }
                 reverbPtr1 = MusicGlobals->reverbPtr & REVERB_BUFFER_MASK_SMALL;
@@ -434,6 +446,8 @@ static void PV_RunStereoFixedReverb(ReverbMode which)
                     case Q_RATE_48K:
                         a = 9;
                         break;
+                    default:
+                        break;
                 }
                 reverbPtr2 = (MusicGlobals->reverbPtr - 632*a) & REVERB_BUFFER_MASK; 
                 reverbPtr3 = (MusicGlobals->reverbPtr - 450*a) & REVERB_BUFFER_MASK;
@@ -481,6 +495,8 @@ static void PV_RunStereoFixedReverb(ReverbMode which)
                     case Q_RATE_48K:
                         a = 9;
                         break;
+                    default:
+                        break;
                 }
                 reverbPtr2 = (MusicGlobals->reverbPtr - 632*a) & REVERB_BUFFER_MASK; 
                 reverbPtr3 = (MusicGlobals->reverbPtr - 430*a) & REVERB_BUFFER_MASK;
@@ -524,6 +540,8 @@ static void PV_RunStereoFixedReverb(ReverbMode which)
                     case Q_RATE_44K:
                     case Q_RATE_48K:
                         a = 8;
+                        break;
+                    default:
                         break;
                 }
                 reverbPtr2 = (MusicGlobals->reverbPtr - 1100*a) & REVERB_BUFFER_MASK; 
@@ -572,6 +590,8 @@ static void PV_RunStereoFixedReverb(ReverbMode which)
                     case Q_RATE_48K:
                         a = 9;
                         break;
+                    default:
+                        break;
                 }
                 reverbPtr2 = (MusicGlobals->reverbPtr - 500*a) & REVERB_BUFFER_MASK; 
                 reverbPtr3 = (MusicGlobals->reverbPtr - 674*a) & REVERB_BUFFER_MASK;
@@ -615,6 +635,8 @@ static void PV_RunStereoFixedReverb(ReverbMode which)
                     case Q_RATE_48K:
                         a = 8;
                         break;
+                    default:
+                        break;
                 }
                 reverbPtr2 = (MusicGlobals->reverbPtr - 2700*a) & REVERB_BUFFER_MASK; 
                 reverbPtr3 = (MusicGlobals->reverbPtr - 3250*a) & REVERB_BUFFER_MASK;
@@ -657,7 +679,9 @@ static void PV_RunStereoFixedReverb(ReverbMode which)
                         break;
                     case Q_RATE_48K:
                         a = 5;
-                        break;                  
+                        break;
+                    default:
+                        break;
                 }
                 reverbPtr1 = MusicGlobals->reverbPtr & REVERB_BUFFER_MASK_SMALL;
                 reverbPtr2 = (MusicGlobals->reverbPtr - 1100*a) & REVERB_BUFFER_MASK_SMALL; 

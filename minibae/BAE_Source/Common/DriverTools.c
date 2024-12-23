@@ -295,6 +295,8 @@ SongResource * XNewSongPtr( SongType songType,
             }
             song = (SongResource *)songRMF2;
             break;
+        default:
+            break;
     }
     return song;
 }
@@ -559,6 +561,9 @@ static XBOOL PV_ValidResourceForSongType(SongResourceType resourceType, SongType
                 case R_INSTRUMENT_REMAP:
                     valid = TRUE;
                     break;
+
+                default:
+                    break;
             }
             break;
         case SONG_TYPE_RMF:
@@ -594,7 +599,12 @@ static XBOOL PV_ValidResourceForSongType(SongResourceType resourceType, SongType
                 case R_MISC8:
                     valid = TRUE;
                     break;
+
+                default:
+                    break;
             }
+            break;
+        default:
             break;
     }
     return valid;
@@ -742,6 +752,9 @@ SongResource * XChangeSongResource(SongResource *theSong, long songSize, SongRes
                                 pData += name4[0] + 1;
                             }
                             break;
+
+                        default:
+                            break;
                     }
                     break;
                 case SONG_TYPE_RMF:
@@ -754,6 +767,8 @@ SongResource * XChangeSongResource(SongResource *theSong, long songSize, SongRes
                     }
                     newSong = PV_AddRMFSongResource(theSong, resourceType, pResource, resourceLength);
                     // we don't throw away this because we let the caller do that
+                    break;
+                default:
                     break;
             }
         }
@@ -918,6 +933,9 @@ unsigned long XGetSongInformationSize(SongResource *theSong, long songSize, Song
                             }
                         }
                         break;
+
+                    default:
+                        break;
                 }
                 break;
             
@@ -935,6 +953,9 @@ unsigned long XGetSongInformationSize(SongResource *theSong, long songSize, Song
             
             case SONG_TYPE_RMF_LINEAR:
                 break;
+
+                default:
+                    break;
         }
     }
     return size;
@@ -1056,6 +1077,9 @@ void XGetSongInformation(SongResource *theSong, long songSize, SongInfo type,
                             }
                         }
                         break;
+
+                    default:
+                        break;
                 }
                 break;
             
@@ -1073,6 +1097,9 @@ void XGetSongInformation(SongResource *theSong, long songSize, SongInfo type,
                 break;
             
             case SONG_TYPE_RMF_LINEAR:
+                break;
+
+            default:
                 break;
         }
 
@@ -1549,6 +1576,8 @@ static char * PV_GetStringItemFromResource_info(SongResource_Info *pSongInfo, So
         case R_MISC8:
             resourceName = pSongInfo->misc8;
             break;
+        default:
+            break;
     }
     return resourceName;
 }
@@ -1634,6 +1663,8 @@ static void PV_SetStringItemFromResource_info(SongResource_Info *pSongInfo, Song
             break;
         case R_MISC8:
             pSongInfo->misc8 = resourceName;
+            break;
+        default:
             break;
     }
 }

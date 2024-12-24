@@ -82,6 +82,7 @@ install-minibae:
 	install -Cv -m 0644 $(CURDIR)/external/heyigor/miniBAE/minibae/BAE_Source/Common/X_PackStructures.h $(INSTALL_DIR)/include/audio/minibae/X_PackStructures.h
 	install -Cv -m 0644 $(CURDIR)/external/heyigor/miniBAE/minibae/BAE_Source/Common/X_UnpackStructures.h $(INSTALL_DIR)/include/audio/minibae/X_UnpackStructures.h
 	install -Cv -m 0644 $(CURDIR)/external/heyigor/miniBAE/minibae/BAE_MPEG_Source_II/XMPEG_BAE_API.h $(INSTALL_DIR)/include/audio/minibae/XMPEG_BAE_API.h
+	install -Cv -m 0644 $(CURDIR)/external/heyigor/miniBAE/minibae/BAE_Source/Platform/BAE_API.h $(INSTALL_DIR)/include/audio/minibae/BAE_API.h
 	install -Cv -m 0644 $(CURDIR)/external/heyigor/miniBAE/minibae/BAE_Source/Platform/BAEBuildOptions_libwtv.h $(INSTALL_DIR)/include/audio/minibae/BAEBuildOptions_libwtv.h
 
 clean-minibae:

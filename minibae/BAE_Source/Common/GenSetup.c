@@ -675,8 +675,10 @@ OPErr GM_InitGeneralSound(void *threadContext, Rate theRate, TerpMode theTerp, A
         pMixer->lastSamplePosition = 0;
         pMixer->sequencerPaused = TRUE;
         pMixer->systemPaused = TRUE;
+#if USE_CALLBACKS
         pMixer->pOutputProc = NULL;
         pMixer->pTaskProc = NULL;
+#endif
         BAE_NewMutex(&pMixer->queueLock, "bae", "seqq", __LINE__);
         PV_CleanExternalQueue(pMixer);
 

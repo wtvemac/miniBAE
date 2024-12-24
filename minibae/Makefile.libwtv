@@ -9,7 +9,7 @@ MINIBAE_INC += -I$(CURDIR)/external/heyigor/miniBAE/minibae/BAE_Source/Platform
 MINIBAE_INC += -I$(CURDIR)/external/heyigor/miniBAE/minibae/BAE_MPEG_Source_II
 MINIBAE_INC += -I$(CURDIR)/external/heyigor/miniBAE/minibae/banks/patches
 
-SRC := BAE_API_libwtv.c
+SRC := 
 
 SRC += \
 	DriverTools.c \

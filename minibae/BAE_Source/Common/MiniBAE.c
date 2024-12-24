@@ -3867,6 +3867,7 @@ BAEResult BAESound_Start(BAESound sound,
 {
     OPErr           theErr = NO_ERR;
     long            volume;
+    unsigned long   numFrames = 0;
 
     priority = priority; // NEED TO IMPLEMENT PRIORITY FOR SOUNDS IN ENGINE.
 

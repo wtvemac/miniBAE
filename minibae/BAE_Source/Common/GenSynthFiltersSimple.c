@@ -35,7 +35,7 @@
 **
 **  Generalized Music Synthesis package. Part of SoundMusicSys.
 **
-**  © Copyright 1995-1999 Beatnik, Inc, All Rights Reserved.
+**  ï¿½ Copyright 1995-1999 Beatnik, Inc, All Rights Reserved.
 **  Written by Jim Nitchals
 **
 **  Beatnik products contain certain trade secrets and confidential and
@@ -134,10 +134,7 @@
 // with the macro THE_CHECK
 void PV_ServeInterp2FilterPartialBuffer (GM_Voice *this_voice, XBOOL looping)
 {
-#if 1
-    this_voice;
-    looping;
-#else
+#if 0
 // Not required because 8-bit samples are converted to 16-bit upon load.
     register INT32          *destL;
     register UBYTE          *source;
@@ -254,17 +251,13 @@ FINISH:
 // with the macro THE_CHECK
 void PV_ServeStereoInterp2FilterPartialBuffer (GM_Voice *this_voice, XBOOL looping)
 {
-    this_voice;
-    looping;
 }
 
 // handle 8 bit voices that are mixed down mono in the full case in which we can 
 // process a complete slice of data without checking for loop points
 void PV_ServeInterp2FilterFullBuffer(GM_Voice *this_voice)
 {
-#if 1
-    this_voice;
-#else
+#if 0
 // Not required because 8-bit samples are converted to 16-bit upon load.
     register INT32          *destL;
     register UBYTE          *source;
@@ -372,14 +365,13 @@ void PV_ServeInterp2FilterFullBuffer(GM_Voice *this_voice)
 // process a complete slice of data without checking for loop points
 void PV_ServeStereoInterp2FilterFullBuffer (GM_Voice *this_voice)
 {
-    this_voice;
 }
 
-// ¥¥¥¥¥¥¥¥¥¥¥¥¥ ¥¥¥¥¥¥¥¥¥¥¥¥¥ ¥¥¥¥¥¥¥¥¥¥¥¥¥ ¥¥¥¥¥¥¥¥¥¥¥¥¥ ¥¥¥¥¥¥¥¥¥¥¥¥¥ ¥¥¥¥¥¥¥¥¥¥¥¥¥ ¥¥¥¥¥¥¥¥¥¥
-// ¥¥¥¥¥¥¥¥¥¥¥¥¥ ¥¥¥¥¥¥¥¥¥¥¥¥¥ ¥¥¥¥¥¥¥¥¥¥¥¥¥ ¥¥¥¥¥¥¥¥¥¥¥¥¥ ¥¥¥¥¥¥¥¥¥¥¥¥¥ ¥¥¥¥¥¥¥¥¥¥¥¥¥ ¥¥¥¥¥¥¥¥¥¥
-// ¥¥¥¥¥¥¥¥¥¥¥¥¥ ¥¥¥¥¥¥¥¥¥¥¥¥¥ ¥¥¥¥¥¥¥¥¥¥¥¥¥ ¥¥¥¥¥¥¥¥¥¥¥¥¥ ¥¥¥¥¥¥¥¥¥¥¥¥¥ ¥¥¥¥¥¥¥¥¥¥¥¥¥ ¥¥¥¥¥¥¥¥¥¥
-// ¥¥¥¥¥¥¥¥¥¥¥¥¥ ¥¥¥¥¥¥¥¥¥¥¥¥¥ ¥¥¥¥¥¥¥¥¥¥¥¥¥ ¥¥¥¥¥¥¥¥¥¥¥¥¥ ¥¥¥¥¥¥¥¥¥¥¥¥¥ ¥¥¥¥¥¥¥¥¥¥¥¥¥ ¥¥¥¥¥¥¥¥¥¥
-// ¥¥¥¥¥¥¥¥¥¥¥¥¥ ¥¥¥¥¥¥¥¥¥¥¥¥¥ ¥¥¥¥¥¥¥¥¥¥¥¥¥ ¥¥¥¥¥¥¥¥¥¥¥¥¥ ¥¥¥¥¥¥¥¥¥¥¥¥¥ ¥¥¥¥¥¥¥¥¥¥¥¥¥ ¥¥¥¥¥¥¥¥¥¥
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 // 16 bit cases
 
 // handle 16 bit voices that are mixed down mono in the full case in which we can 
@@ -552,8 +544,6 @@ void PV_ServeStereoInterp2FilterFullBuffer16 (GM_Voice *this_voice)
 // with the macro THE_CHECK
 void PV_ServeStereoInterp2FilterPartialBuffer16 (GM_Voice *this_voice, XBOOL looping)
 {
-    this_voice;
-    looping;
 }
 #endif  // (USE_TERP2 == TRUE) || (USE_DROP_SAMPLE == TRUE) || (USE_TERP1 == TRUE)
 

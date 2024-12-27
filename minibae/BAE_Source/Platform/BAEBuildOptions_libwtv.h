@@ -89,10 +89,10 @@
 #define USE_TERP2                                               1
 #define USE_NEW_EFFECTS                                         0
 // Interpolator:
-#define EMAC_SAMPLE_LOOP_COUNTI                                 2 // 1, 2, 4, or 16
+#define EMAC_SAMPLE_LOOP_COUNTI                                 4 // 1, 2, 4, or 16
 #define EMAC_AMPLITUDE_ADJUSTI                                  3
 // Filter:
-#define EMAC_SAMPLE_LOOP_COUNTF                                 2 // 1, 2, 4, or 16
+#define EMAC_SAMPLE_LOOP_COUNTF                                 4 // 1, 2, 4, or 16
 #define EMAC_AMPLITUDE_ADJUSTF                                  3
 
 #define EMAC_VOL_PRECISION_SCALAR                               6L
@@ -104,7 +104,7 @@
 
 #define FILE_NAME_LENGTH                                        1024
 
-#define EMAC_DO_TEST_TONE                                       1
+#define EMAC_DO_TEST_TONE                                       0
 #define EMAC_TEST_TONE_HZ                                       1000
 #define EMAC_DEBUG_NO_FILTER                                    0
 #define EMAC_DEBUG_NO_INTERP                                    0

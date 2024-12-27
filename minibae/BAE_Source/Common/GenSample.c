@@ -742,7 +742,7 @@ VOICE_REFERENCE GM_SetupSample(XPTR theData, UINT32 startFrame, UINT32 frames, X
     return DEAD_VOICE;
 }
 
-#if X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
+#if X_PLATFORM != X_WEBTV
 // stereoPosition is in the range 63 to -63
 VOICE_REFERENCE GM_SetupSampleFromInfo(GM_Waveform *pSample, void *context,
                                 INT32 sampleVolume, INT32 stereoPosition,
@@ -996,7 +996,7 @@ void GM_SetSampleDoneCallback(VOICE_REFERENCE reference, GM_SoundDoneCallbackPtr
 }
 #endif
 
-#if X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
+#if X_PLATFORM != X_WEBTV
 XFIXED GM_GetSamplePitch(VOICE_REFERENCE reference)
 {
     XFIXED      rate;

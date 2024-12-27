@@ -2609,9 +2609,6 @@ XFILE_CACHED_ITEM   *item;
         item->fileOffsetData = XGetLong(&item->fileOffsetData);
         item++;
     }
-#else
-pCache;
-inFileOrder;
 #endif
 }
 

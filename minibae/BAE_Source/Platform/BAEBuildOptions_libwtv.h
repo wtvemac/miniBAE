@@ -56,7 +56,7 @@
 
 #define CPU_TYPE                                                kMIPS
 
-#define X_WORD_ORDER                                            1
+#define X_WORD_ORDER                                            0
 
 #define BAE_COMPLETE                                            1
 #define USE_FLOAT                                               0

@@ -1186,7 +1186,7 @@ BAEResult BAEMixer_Is8BitSupported(BAEMixer mixer, BAE_BOOL *outIsSupported)
 //
 static TerpMode PV_GetDefaultTerp(BAETerpMode t)
 {
-    TerpMode    theTerp;
+    TerpMode    theTerp = 0;
 
     switch (t)
     {
@@ -3806,7 +3806,7 @@ static void PV_BAESound_SetCallback(BAESound sound, BAE_SoundCallbackPtr pCallba
 {
     sound->mCallback = pCallback;
     sound->mCallbackReference = callbackReference;
-    
+#if USE_CALLBACKS
     if (pCallback == NULL)  // going to clear
     {
         if (sound->voiceRef != DEAD_VOICE)
@@ -3814,6 +3814,7 @@ static void PV_BAESound_SetCallback(BAESound sound, BAE_SoundCallbackPtr pCallba
             GM_SetSampleDoneCallback(sound->voiceRef, NULL, NULL);
         }
     }
+#endif
 }
 
 
@@ -3914,8 +3915,10 @@ BAEResult BAESound_Start(BAESound sound,
             }
             else
             {
+#if USE_CALLBACKS
                 // set our default done callback with the object            
                 GM_SetSampleDoneCallback(sound->voiceRef, PV_DefaultSoundDoneCallback, (void *)sound);
+#endif
                 GM_SetSampleRouteBus(sound->voiceRef, sound->mRouteBus);
                 GM_ChangeSampleVolume(sound->voiceRef, volume);
                 GM_StartSample(sound->voiceRef);

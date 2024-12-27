@@ -2073,11 +2073,18 @@ INLINE static void PV_ServeInstruments(void)
 }
 #endif  // REVERB_TYPE
 
-#define GENERATE_TONE       0       // will generate a tone ranther than engine. Used for debugging
+#define GENERATE_TONE             0       // will generate a tone ranther than engine. Used for debugging
 
-static int          gToneOn = GENERATE_TONE;
-static int          gToneFreq = 1000;
-static int          gTonePhase = 0;
+#ifndef EMAC_DO_TEST_TONE
+    #define EMAC_DO_TEST_TONE     GENERATE_TONE
+#endif
+#ifndef EMAC_TEST_TONE_HZ
+    #define EMAC_TEST_TONE_HZ     1000
+#endif
+
+static int          gToneOn     = GENERATE_TONE || EMAC_DO_TEST_TONE;
+static int          gToneFreq   = EMAC_TEST_TONE_HZ;
+static int          gTonePhase  = 0;
 
 
 static void PV_FillTone(void *pBuffer, unsigned long toneFrames, int bitSize, int stereo)
@@ -2208,6 +2215,96 @@ void BAE_BuildMCUSlice(void * threadContext, XDWORD dspTime)
 // at the moment. sampleFrames is how many sample frames. These two values should match
 // ie. sampleFrames = bufferByteLength / channels / bitsize / 8
 #if BAE_COMPLETE
+#if X_PLATFORM == X_LIBWTV
+static void PV_ProcessSyncronizedVoiceStart(void);
+void BAE_BuildMixerSlice(void *threadContext, void *pAudioBuffer, long bufferByteLength, long sampleFrames)
+{
+    GM_Mixer        *pMixer;
+    unsigned long   delta, end;
+
+    pMixer = MusicGlobals;
+    if (pMixer && pAudioBuffer && bufferByteLength && sampleFrames)
+    {
+
+        delta = 0;//XMicroseconds();        // get current time
+
+        pMixer->insideAudioInterrupt = 1;   // busy
+
+        pMixer->syncCount += 0;//BAE_GetSliceTimeInMicroseconds();          // 11 milliseconds
+        pMixer->syncBufferCount++;
+
+        // Generate new audio samples, putting them directly 
+        // into the output buffer.
+
+        pMixer->filterPartialBufferProc     = PV_ServeStereoInterp2FilterPartialBuffer;
+        pMixer->filterPartialBufferProc16   = PV_ServeStereoInterp2FilterPartialBuffer16;
+        pMixer->filterFullBufferProc        = PV_ServeStereoInterp2FilterFullBuffer;
+        pMixer->filterFullBufferProc16      = PV_ServeStereoInterp2FilterFullBuffer16;
+        pMixer->fullBufferProc      = PV_ServeStereoInterp2FullBuffer;
+        pMixer->partialBufferProc   = PV_ServeStereoInterp2PartialBuffer;
+        pMixer->fullBufferProc16    = PV_ServeStereoInterp2FullBuffer16;
+        pMixer->partialBufferProc16 = PV_ServeStereoInterp2PartialBuffer16;
+
+        if (pMixer->systemPaused == FALSE)
+        {
+            // clear output buffer before starting mix, and verb buffers if enabled
+            PV_ClearMixBuffers(pMixer->generateStereoOutput);
+
+    #if USE_MOD_API
+    // For WebTV, we keep MOD support simple. Verb is always enabled, and we call the Mod sample generation
+    // code. If at some time in the future you (WebTV) want to support enbled to disabled verb, this code
+    // will need to be duplicated here below and wrapped around a boolean for enabling or disabling verb.
+            PV_WriteModOutput(pMixer->outputRate, pMixer->generateStereoOutput);
+    #endif
+
+            // ok, start any voices in sync that need it
+            //PV_ProcessSyncronizedVoiceStart();
+
+            // process enabled voices, and add verb, and filter
+            PV_ServeInstruments();
+
+            PV_ProcessSequencerEvents(threadContext);       // process all songs and external events
+
+            PV_ProcessSampleEvents(threadContext);          // process all sample events
+
+    #if USE_STREAM_API
+            // process stream fades
+            PV_ServeStreamFades();
+    #endif
+
+            // if master volume has been set to zero, silence reins.
+            if ((pMixer->scaleBackAmount == 0) || (pMixer->MasterVolume == 0))
+            {
+                PV_ClearMixBuffers(pMixer->generateStereoOutput);
+            }
+
+            PV_Generate16outputStereo((OUTSAMPLE16 *)pAudioBuffer);
+        }
+
+        if (gToneOn)
+        {
+            PV_FillTone(pAudioBuffer, sampleFrames,
+                                (pMixer->generate16output) ? 2 : 1,
+                                (pMixer->generateStereoOutput) ? 2 : 1);
+        }
+
+        pMixer->samplesWritten += sampleFrames;
+
+        GM_UpdateSamplesPlayed(BAE_GetDeviceSamplesPlayedPosition());
+        pMixer->insideAudioInterrupt = 0;   // free
+
+        end = XMicroseconds();
+        if (end < delta)
+        {   // we wrapped
+            pMixer->timeSliceDifference = delta - end;
+        }
+        else
+        {
+            pMixer->timeSliceDifference = end - delta;
+        }
+    }
+}
+#else // X_PLATFORM == X_LIBWTV
 void BAE_BuildMixerSlice(void *threadContext, void *pAudioBuffer, long bufferByteLength,
                                                             long sampleFrames)
 {
@@ -2265,7 +2362,8 @@ void BAE_BuildMixerSlice(void *threadContext, void *pAudioBuffer, long bufferByt
         }
     }
 }
-#endif
+#endif // else X_PLATFORM == X_LIBWTV
+#endif // BAE_COMPLETE
 
 #if BAE_COMPLETE
 // Get time in microseconds between calls to BAE_BuildMixerSlice
@@ -2424,17 +2522,17 @@ static XBOOL PV_SetupProcessFunctions(GM_Mixer *pMixer)
         case E_AMP_SCALED_DROP_SAMPLE:
             if (pMixer->generateStereoOutput)
             {
-                pMixer->fullBufferProc      = PV_ServeStereoAmpFullBuffer;
-                pMixer->partialBufferProc   = PV_ServeStereoAmpPartialBuffer;
-                pMixer->fullBufferProc16    = PV_ServeStereoInterp2FullBuffer16;    // notice:  we use terp 2 cases
-                pMixer->partialBufferProc16 = PV_ServeStereoInterp2PartialBuffer16; //          for 16 bit samples
+                //pMixer->fullBufferProc      = PV_ServeStereoAmpFullBuffer;
+                //pMixer->partialBufferProc   = PV_ServeStereoAmpPartialBuffer;
+                //pMixer->fullBufferProc16    = PV_ServeStereoInterp2FullBuffer16;    // notice:  we use terp 2 cases
+                //pMixer->partialBufferProc16 = PV_ServeStereoInterp2PartialBuffer16; //          for 16 bit samples
             }
             else
             {
-                pMixer->fullBufferProc      = PV_ServeDropSampleFullBuffer;
-                pMixer->partialBufferProc   = PV_ServeDropSamplePartialBuffer;
-                pMixer->fullBufferProc16    = PV_ServeDropSampleFullBuffer16;
-                pMixer->partialBufferProc16 = PV_ServeDropSamplePartialBuffer16;
+                //pMixer->fullBufferProc      = PV_ServeDropSampleFullBuffer;
+                //pMixer->partialBufferProc   = PV_ServeDropSamplePartialBuffer;
+                //pMixer->fullBufferProc16    = PV_ServeDropSampleFullBuffer16;
+                //pMixer->partialBufferProc16 = PV_ServeDropSamplePartialBuffer16;
             }
             break;
     #endif
@@ -2442,15 +2540,15 @@ static XBOOL PV_SetupProcessFunctions(GM_Mixer *pMixer)
         case E_2_POINT_INTERPOLATION:
             if (pMixer->generateStereoOutput)
             {
-                pMixer->fullBufferProc      = PV_ServeStereoInterp1FullBuffer;
-                pMixer->partialBufferProc   = PV_ServeStereoInterp1PartialBuffer;
+                //pMixer->fullBufferProc      = PV_ServeStereoInterp1FullBuffer;
+                //pMixer->partialBufferProc   = PV_ServeStereoInterp1PartialBuffer;
                 pMixer->fullBufferProc16    = PV_ServeStereoInterp2FullBuffer16;    // notice:  we use terp 2 cases
                 pMixer->partialBufferProc16 = PV_ServeStereoInterp2PartialBuffer16; //          for 16 bit samples
             }
             else
             {
-                pMixer->fullBufferProc      = PV_ServeInterp1FullBuffer;
-                pMixer->partialBufferProc   = PV_ServeInterp1PartialBuffer;
+                //pMixer->fullBufferProc      = PV_ServeInterp1FullBuffer;
+                //pMixer->partialBufferProc   = PV_ServeInterp1PartialBuffer;
                 pMixer->fullBufferProc16    = PV_ServeInterp2FullBuffer16;          // notice:  we use terp 2 cases
                 pMixer->partialBufferProc16 = PV_ServeInterp2PartialBuffer16;       //          for 16 bit samples
             }
@@ -2653,7 +2751,7 @@ void PV_ProcessSampleFrame(void *threadContext, void *destinationSamples)
         }
 #endif
 
-#if (X_PLATFORM == X_WEBTV) && (X_PLATFORM != X_LIBWTV)
+#if X_PLATFORM == X_WEBTV && USE_MOD_API
 // For WebTV, we keep MOD support simple. Verb is always enabled, and we call the Mod sample generation
 // code. If at some time in the future you (WebTV) want to support enbled to disabled verb, this code
 // will need to be duplicated here below and wrapped around a boolean for enabling or disabling verb.

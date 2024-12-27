@@ -104,7 +104,9 @@
 #if (USE_8_BIT_OUTPUT == TRUE) && (USE_STEREO_OUTPUT == TRUE)
 void PV_Generate8outputStereo(OUTSAMPLE8 * dest8)
 {
+#if X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
     register INT32          b, c;
+#endif
     register INT32          *sourceLR;
     register LOOPCOUNT      count;
 
@@ -112,8 +114,10 @@ void PV_Generate8outputStereo(OUTSAMPLE8 * dest8)
     */
     sourceLR = &MusicGlobals->songBufferDry[0];
 
+#if X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
     if ( (MusicGlobals->outputRate != Q_RATE_11K_TERP_22K) && (MusicGlobals->outputRate != Q_RATE_22K_TERP_44K) )
     {
+#endif
         // native sample rates
         for (count = MusicGlobals->Four_Loop; count > 0; --count)
         {
@@ -128,6 +132,7 @@ void PV_Generate8outputStereo(OUTSAMPLE8 * dest8)
             dest8 += 8;
             sourceLR += 8;
         }
+#if X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
     }
     else
     {                   
@@ -164,6 +169,7 @@ void PV_Generate8outputStereo(OUTSAMPLE8 * dest8)
             dest8 += 16;
         }
     }
+#endif  // X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
 }
 #endif  // (USE_8_BIT_OUTPUT == TRUE) && (USE_STEREO_OUTPUT == TRUE)
 
@@ -171,7 +177,9 @@ void PV_Generate8outputStereo(OUTSAMPLE8 * dest8)
 void PV_Generate8outputMono(OUTSAMPLE8 * dest8)
 {
     register LOOPCOUNT      count;
+#if X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
     register INT32          b;
+#endif
     register INT32          *source;
 
     /* Convert intermediate 16-bit sample format to 16 bit output samples:
@@ -181,8 +189,10 @@ void PV_Generate8outputMono(OUTSAMPLE8 * dest8)
     /* Here's how to add a buzz if we want to make sure the Sound Manager's alive.
     */
 //      source[0] += 0x60;
+#if X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
     if ( (MusicGlobals->outputRate != Q_RATE_11K_TERP_22K) && (MusicGlobals->outputRate != Q_RATE_22K_TERP_44K) )
     {
+#endif
         // native sample rates
         for (count = MusicGlobals->Four_Loop; count > 0; --count)
         {
@@ -193,6 +203,7 @@ void PV_Generate8outputMono(OUTSAMPLE8 * dest8)
             source += 4;
             dest8 += 4;
         }
+#if X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
     }
     else
     {                   
@@ -217,6 +228,7 @@ void PV_Generate8outputMono(OUTSAMPLE8 * dest8)
             dest8 += 8;
         }
     }
+#endif  // X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
 }
 #endif  // (USE_8_BIT_OUTPUT == TRUE) && (USE_MONO_OUTPUT == TRUE)
 
@@ -235,8 +247,10 @@ void PV_Generate16outputStereo(OUTSAMPLE16 * dest16)
     sourceLR = &MusicGlobals->songBufferDry[0];
 
     k8000 = 0x8000;
+#if X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
     if ( (MusicGlobals->outputRate != Q_RATE_11K_TERP_22K) && (MusicGlobals->outputRate != Q_RATE_22K_TERP_44K) )
     {
+#endif
         {
             // native sample rates
             for (count = MusicGlobals->Four_Loop; count > 0; --count)
@@ -318,8 +332,8 @@ void PV_Generate16outputStereo(OUTSAMPLE16 * dest16)
                 sourceLR += 8; dest16 += 8;
             }
         }
-    }
 #if X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
+    }
     else
     {
         // 11k terped to 22k, and 22k terped to 44k
@@ -409,8 +423,10 @@ void PV_Generate16outputMono(OUTSAMPLE16 * dest16)
     /* Here's how to add a buzz if we want to make sure the Sound Manager's alive.
     */
 //      source[0] += 0x60;
+#if X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
     if ( (MusicGlobals->outputRate != Q_RATE_11K_TERP_22K) && (MusicGlobals->outputRate != Q_RATE_22K_TERP_44K) )
     {
+#endif
         // native sample rates
         for (count = MusicGlobals->Four_Loop; count > 0; --count)
         {
@@ -458,6 +474,7 @@ void PV_Generate16outputMono(OUTSAMPLE16 * dest16)
             }
             source += 4; dest16 += 4;
         }
+#if X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
     }
     else
     {                   
@@ -517,6 +534,7 @@ void PV_Generate16outputMono(OUTSAMPLE16 * dest16)
             source += 4; dest16 += 8;
         }
     }
+#endif  // X_PLATFORM != X_WEBTV && X_PLATFORM != X_LIBWTV
 }
 #endif  // (USE_16_BIT_OUTPUT == TRUE) && (USE_MONO_OUTPUT == TRUE)
 

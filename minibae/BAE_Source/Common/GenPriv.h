@@ -230,11 +230,106 @@
 #include "X_API.h"
 #include "GenSnd.h"
 
-#define VOLUME_PRECISION_SCALAR     6L      // used to be 8, so we must scale down output by 2
-#define OUTPUT_SCALAR               9L      // 9 for volume minus 4 for increased volume_range resolution, plus 2 for increased volume precision scalar
-#define VOLUME_RANGE                4096    // original range was 256, therefore:
-#define UPSCALAR                    16L     // multiplier (NOT a shift count!) for increasing amplitude resolution
-#define MAXRESONANCE                127     // mask and buffer size for resonant filter.  Higher means wider frequency range.
+#ifndef EMAC_DO_TEST_TONE
+    #define EMAC_DO_TEST_TONE           0
+#endif
+#ifndef EMAC_TEST_TONE_HZ
+    #define EMAC_TEST_TONE_HZ           1000
+#endif
+#ifndef EMAC_DEBUG_NO_FILTER
+    #define EMAC_DEBUG_NO_FILTER        0
+#endif
+#ifndef EMAC_DEBUG_NO_INTERP
+    #define EMAC_DEBUG_NO_INTERP        0
+#endif
+#ifndef EMAC_DEBUG_NO_PARTIAL
+    #define EMAC_DEBUG_NO_PARTIAL       0
+#endif
+#ifndef EMAC_DEBUG_NO_FULL
+    #define EMAC_DEBUG_NO_FULL          0
+#endif
+#ifndef EMAC_DEBUG_NO_STEREO
+    #define EMAC_DEBUG_NO_STEREO        0
+#endif
+#ifndef EMAC_DEBUG_NO_MONO
+    #define EMAC_DEBUG_NO_MONO          0
+#endif
+#ifndef EMAC_DEBUG_NO_8BIT
+    #define EMAC_DEBUG_NO_8BIT          0
+#endif
+#ifndef EMAC_DEBUG_NO_16BIT
+    #define EMAC_DEBUG_NO_16BIT         0
+#endif
+// Interpolator:
+#ifndef EMAC_AMPLITUDE_ADJUSTI
+    #define EMAC_AMPLITUDE_ADJUSTI      1
+#endif
+#if EMAC_SAMPLE_LOOP_COUNTI == 1
+    #define EMAC_SAMPLE_LOOPSI          MusicGlobals->One_Slice
+    #define EMAC_SAMPLES_PER_LOOPI      1
+#elif EMAC_SAMPLE_LOOP_COUNTI == 2
+    #define EMAC_SAMPLE_LOOPSI          MusicGlobals->Two_Loop
+    #define EMAC_SAMPLES_PER_LOOPI      2
+#elif EMAC_SAMPLE_LOOP_COUNTI == 4
+    #define EMAC_SAMPLE_LOOPSI          MusicGlobals->Four_Loop 
+    #define EMAC_SAMPLES_PER_LOOPI      4
+#elif EMAC_SAMPLE_LOOP_COUNTI == 16
+    #define EMAC_SAMPLE_LOOPSI          MusicGlobals->Sixteen_Loop
+    #define EMAC_SAMPLES_PER_LOOPI      16
+#else
+    #define EMAC_SAMPLE_LOOPSI          MusicGlobals->Four_Loop 
+    #define EMAC_SAMPLES_PER_LOOPI      4
+#endif
+// Filter:
+#ifndef EMAC_AMPLITUDE_ADJUSTF
+    #define EMAC_AMPLITUDE_ADJUSTF      3
+#endif
+#if EMAC_SAMPLE_LOOP_COUNTF == 1
+    #define EMAC_SAMPLE_LOOPSF          MusicGlobals->One_Slice
+    #define EMAC_SAMPLES_PER_LOOPF      1
+#elif EMAC_SAMPLE_LOOP_COUNTF == 2
+    #define EMAC_SAMPLE_LOOPSF          MusicGlobals->Two_Loop
+    #define EMAC_SAMPLES_PER_LOOPF      2
+#elif EMAC_SAMPLE_LOOP_COUNTF == 4
+    #define EMAC_SAMPLE_LOOPSF          MusicGlobals->Four_Loop 
+    #define EMAC_SAMPLES_PER_LOOPF      4
+#elif EMAC_SAMPLE_LOOP_COUNTF == 16
+    #define EMAC_SAMPLE_LOOPSF          MusicGlobals->Sixteen_Loop
+    #define EMAC_SAMPLES_PER_LOOPF      16
+#else
+    #define EMAC_SAMPLE_LOOPSF          MusicGlobals->Four_Loop 
+    #define EMAC_SAMPLES_PER_LOOPF      4
+#endif
+#ifndef EMAC_VOL_PRECISION_SCALAR
+    #define EMAC_VOL_PRECISION_SCALAR    6L   // used to be 8, so we must scale down output by 2
+#endif
+#ifndef EMAC_OUTPUT_SCALAR
+    #define EMAC_OUTPUT_SCALAR           9L   // 9 for volume minus 4 for increased volume_range resolution, plus 2 for increased volume precision scalar
+#endif
+#ifndef EMAC_VOL_RANGE
+    #define EMAC_VOL_RANGE               4096 // original range was 256, therefore:
+#endif
+#ifndef EMAC_UPSCALAR
+    #define EMAC_UPSCALAR                16L // multiplier (NOT a shift count!) for increasing amplitude resolution
+#endif
+#ifndef EMAC_MAX_RESONANCE
+    #define EMAC_MAX_RESONANCE           127 // mask and buffer size for resonant filter.  Higher means wider frequency range.
+#endif
+#ifndef EMAC_STEP_BIT_RANGE
+    #define EMAC_STEP_BIT_RANGE          12L
+#endif
+#ifndef EMAC_STEREO_DEBUG
+    #define EMAC_STEREO_DEBUG             0
+#endif
+#ifndef SUPPORT_DLS
+    #define SUPPORT_DLS                   1
+#endif
+
+#define VOLUME_PRECISION_SCALAR           EMAC_VOL_PRECISION_SCALAR
+#define OUTPUT_SCALAR                     EMAC_OUTPUT_SCALAR
+#define VOLUME_RANGE                      EMAC_VOL_RANGE
+#define UPSCALAR                          EMAC_UPSCALAR
+#define MAXRESONANCE                      EMAC_MAX_RESONANCE
 
 // BUFFER_SLICE_TIME is calculated by the formula:
 //
@@ -244,27 +339,27 @@
 // the amount of time in microseconds that
 // passes when calling ProcessSampleFrame
 #if 1
-    #define BUFFER_SLICE_TIME           11610
+    #define BUFFER_SLICE_TIME             11610
 #else
-    #define BUFFER_SLICE_TIME           10000
+    #define BUFFER_SLICE_TIME             10000
 #endif
 
 // These times are fixed because our LFO's, and midi decode code
 // relies on the constant 11.6 ms decode rate. This allows for content to
 // sound the same. 
-#define FIXED_BUFFER_SLICE_TIME         11610
-#define FIXED_MAX_CHUNK_SIZE            512
+#define FIXED_BUFFER_SLICE_TIME           11610
+#define FIXED_MAX_CHUNK_SIZE              512
 
 #if BUFFER_SLICE_TIME == 5000
-    #define MAX_CHUNK_SIZE          224     // max samples to build per slice at 44k
+    #define MAX_CHUNK_SIZE                224     // max samples to build per slice at 44k
 #endif
 
 #if BUFFER_SLICE_TIME == 10000
-    #define MAX_CHUNK_SIZE          448     // max samples to build per slice at 44k
+    #define MAX_CHUNK_SIZE                448     // max samples to build per slice at 44k
 #endif
 
 #if BUFFER_SLICE_TIME == 11610
-    #define MAX_CHUNK_SIZE          512     // max samples to build per slice at 44k
+    #define MAX_CHUNK_SIZE                512     // max samples to build per slice at 44k
 #endif
 
 #ifndef MAX_CHUNK_SIZE
@@ -275,18 +370,15 @@
     #error "Bad MAX_CHUNK_SIZE, Divisible by 16 only!" 
 #endif
 
-
-#define SOUND_EFFECT_CHANNEL        16      // channel used for sound effects. One beyond the normal
-
 // 20.12 (whole.fractional)
-#define STEP_BIT_RANGE              12L
-#define STEP_OVERFLOW_FLAG          (1<<(STEP_BIT_RANGE-1))     
-#define STEP_FULL_RANGE             ((1<<STEP_BIT_RANGE)-1)
+#define STEP_BIT_RANGE                    EMAC_STEP_BIT_RANGE
+#define STEP_OVERFLOW_FLAG                (1<<(STEP_BIT_RANGE-1))
+#define STEP_FULL_RANGE                   ((1<<STEP_BIT_RANGE)-1)
 
-#define ALLOW_16_BIT            1           // 1 - allow 16 bit if available, 0 - force 8 bit
-#define ALLOW_STEREO            1           // 1 - allow stereo if available, 0 - force mono
-#define ALLOW_DEBUG_STEREO      0           // 1 - allow keyboard debugging of stereo code
-#define USE_DLS                 0           // 1 - allow DLS changes, 0 - IGOR
+#define ALLOW_16_BIT                      USE_16_BIT_OUTPUT // 1 - allow 16 bit if available, 0 - force 8 bit
+#define ALLOW_STEREO                      USE_STEREO_OUTPUT // 1 - allow stereo if available, 0 - force mono
+#define ALLOW_DEBUG_STEREO                EMAC_DEBUG_STEREO // 1 - allow keyboard debugging of stereo code
+#define USE_DLS                           EMAC_SUPPORT_DLS  // 1 - allow DLS changes, 0 - IGOR
 
 #if USE_CALLBACKS
 // a macro to handle broken loops and partial buffers in the inner loop code

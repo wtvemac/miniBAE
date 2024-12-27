@@ -823,6 +823,7 @@ static XBOOL PV_PrepareThisBufferForPlaying(GM_AudioStream * pStream, XBYTE buff
                 break;
 
             case STREAM_MODE_START_BUFFER_1:
+#if USE_CALLBACKS
                 DEBUG_STR("PV_PrepareThisBufferForPlaying:STREAM_MODE_START_BUFFER_1");
                 if (pStream->streamLength1)
                 {
@@ -853,8 +854,10 @@ static XBOOL PV_PrepareThisBufferForPlaying(GM_AudioStream * pStream, XBYTE buff
                     }
                     pStream->streamFlushed = FALSE;
                 }
+#endif
                 break;
             case STREAM_MODE_START_BUFFER_2:
+#if USE_CALLBACKS
                 DEBUG_STR("PV_PrepareThisBufferForPlaying:STREAM_MODE_START_BUFFER_2");
                 if (pStream->streamLength2)
                 {
@@ -885,6 +888,7 @@ static XBOOL PV_PrepareThisBufferForPlaying(GM_AudioStream * pStream, XBYTE buff
                     }
                     pStream->streamFlushed = FALSE;
                 }
+#endif
                 break;
         }
     }

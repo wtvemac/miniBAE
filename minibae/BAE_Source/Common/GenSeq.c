@@ -398,7 +398,7 @@ System Exclusive ID number:
 #define DISABLE_QUEUE       0       // if 1 then QGM_ API is not queued. This is used for debugging only
 
 // Prototypes
-#if NOT_SUPPORT_IGOR_FEATURE
+#if SUPPORT_IGOR_FEATURE
 static void PV_SetSampleIntoCache(GM_Song * pSong, XSampleID theID, XBankToken bankToken, XPTR pSndFormatData, OPErr * pErr);
 #endif
 
@@ -2878,7 +2878,7 @@ LENGTH
 DATA
 }
 */
-#if NOT_SUPPORT_IGOR_FEATURE
+#if SUPPORT_IGOR_FEATURE
 static void PV_ProcessIgorResource(GM_Song *pSong,
                                    long command,
                                    unsigned char *pMidiStream,
@@ -2941,7 +2941,9 @@ static void PV_ProcessIgorResource(GM_Song *pSong,
             if ( (theID >= 0) && (theID < (MAX_INSTRUMENTS*MAX_BANKS)) )
             {
                 GM_SetUsedInstrument(pSong, (XLongResourceID)theID, -1L, TRUE); // load this instrument for key splits and such
-                theI = PV_GetInstrument((XSampleID) theID,
+                theI = PV_GetInstrument(GM_GetCurrentMixer(),
+                                        pSong, 
+                                        (XSampleID) theID,
                                         bankToken,
                                         (void *) pMidiStream,
                                         length,
@@ -2973,7 +2975,6 @@ static void PV_SetSampleIntoCache(GM_Song * pSong,
     GM_Mixer *              pMixer;
 
     pMixer = GM_GetCurrentMixer();
-    pSong;
     //  First, if there is no entry in the cache for this ID, create it.
     //  Next, increment refcount and grab it's pointer.
     if (GMCache_IsIDInCache(pMixer, theID, bankToken) != TRUE)
@@ -3332,6 +3333,19 @@ GetMIDIevent:
                 case 0x04:
                 // Lyric event
                 case 0x05:
+#if SUPPORT_KARAOKE
+                    // Karaoke is not in sync when played back at 1x speed
+                    // Needs more work
+                    temp_midi_stream = midi_stream;
+                    value = PV_ReadVariableLengthMidi(&temp_midi_stream);   // get length
+                    // there might be a problem here. need to relook into this.
+                    // maybe we should only do these callbacks during NORMAL_SCAN??
+                    temp_midi_stream[value] = '\0';
+                    PV_CallSongMetaEventCallback(threadContext, pSong, midi_byte, (void *)temp_midi_stream, value, (short)currentTrack);
+
+                    // BAE_PRINTF("lyric event: %s\n", (char *)temp_midi_stream);
+                    goto SkipMeta;
+#endif
                 // Cue point event
                 case 0x07:
                 // program name
@@ -3368,7 +3382,7 @@ GetMIDIevent:
                 //      printf("Meta event 0x7F length %ld\n", value);
                 //      BAE_PrintHexDump(midi_stream, (value < 32) ? value : 32);
                 //  }
-#if NOT_SUPPORT_IGOR_FEATURE
+#if SUPPORT_IGOR_FEATURE
                     if (midi_stream[0] == 0x00)     // IGOR sysex ID
                     {
                         if (midi_stream[1] == 0x01)
@@ -3615,6 +3629,7 @@ void PV_ProcessSequencerEvents(void *threadContext)
     GM_Mixer    *pMixer;
 
     pMixer = GM_GetCurrentMixer();
+
     if (pMixer)
     {
         if (pMixer->enableDriftFixer)

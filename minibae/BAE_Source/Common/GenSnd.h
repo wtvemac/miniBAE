@@ -544,24 +544,31 @@ enum
 };
 typedef unsigned char VelocityCurveType;
 
+#ifndef EMAC_DEBUG_NO_16BIT
+    #define EMAC_MAX_VOICES     64
+#endif
+#ifndef EMAC_DEBUG_NO_16BIT
+    #define EMAC_MAX_TRACKS     65
+#endif
 
-#define MAX_VOICES              64      // max voices at once
-#define MAX_INSTRUMENTS         128     // MIDI number of programs per patch bank
-#define MAX_BANKS               6       // three GM banks; three user banks
-#define MAX_TRACKS              65      // max MIDI file tracks to process (64 + tempo track)
-#define MAX_CHANNELS            17      // max MIDI channels + one extra for sound effects
-#define MAX_CONTROLLERS         128     // max MIDI controllers
+#define MAX_VOICES              EMAC_MAX_VOICES  // max voices at once
+#define MAX_INSTRUMENTS         128              // MIDI number of programs per patch bank
+#define MAX_BANKS               6                // three GM banks; three user banks
+#define MAX_TRACKS              EMAC_MAX_TRACKS  // max MIDI file tracks to process (64 + tempo track)
+#define MAX_CHANNELS            17               // max MIDI channels + one extra for sound effects
+#define MAX_CONTROLLERS         128              // max MIDI controllers
 #define MAX_SONG_VOLUME         127
-#define MAX_NOTE_VOLUME         127     // max note volume
-#define MAX_CURVES              4       // max curve entries in instruments
-#define MAX_LFOS                6       // max LFO's, make sure to add one extra for MOD wheel support
-#define MAX_MASTER_VOLUME       256     // max volume level for master volume level
-#define MAX_SAMPLES             256     // max number of samples that can be loaded
-#define MAX_SONGS               16      // max number of songs that can play at one time
-#define PERCUSSION_CHANNEL      9       // which channel (zero based) is the default percussion channel
-#define MAX_SAMPLE_FRAMES       1048576 // max number of sample frames that we can play in one voice
-                                        // 1024 * 1024 = 1MB. This limit exisits only in DROP_SAMPLE, TERP1, TERP2 cases
-#define MIN_LOOP_SIZE           20      // min number of loop samples that can be processed
+#define MAX_NOTE_VOLUME         127              // max note volume
+#define MAX_CURVES              4                // max curve entries in instruments
+#define MAX_LFOS                6                // max LFO's, make sure to add one extra for MOD wheel support
+#define MAX_MASTER_VOLUME       256              // max volume level for master volume level
+#define MAX_SAMPLES             256              // max number of samples that can be loaded
+#define MAX_SONGS               16               // max number of songs that can play at one time
+#define SOUND_EFFECT_CHANNEL    16               // channel used for sound effects. One beyond the normal
+#define PERCUSSION_CHANNEL      9                // which channel (zero based) is the default percussion channel
+#define MAX_SAMPLE_FRAMES       1048576          // max number of sample frames that we can play in one voice
+                                                 // 1024 * 1024 = 1MB. This limit exisits only in DROP_SAMPLE, TERP1, TERP2 cases
+#define MIN_LOOP_SIZE           20               // min number of loop samples that can be processed
 
 #define MIN_SAMPLE_RATE         ((unsigned long)1L)     // min sample rate. 1.5258789E-5 kHz
 #define MAX_SAMPLE_RATE         rate48khz   // max sample rate  48 kHz
